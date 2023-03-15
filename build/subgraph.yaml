@@ -1,0 +1,192 @@
+specVersion: 0.0.4
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: venue
+    network: matic
+    source:
+      address: "0xEf8855663ECA315078690fb9eAFe1307A345d2Ee"
+      abi: venue
+      startBlock: 40327751
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscripts
+      entities:
+        - VenueList
+      abis:
+        - name: venue
+          file: venue\abis\venue.json
+      eventHandlers:
+        - event: VenueAdded(indexed uint256,string,string,string,uint256,uint256,string,address)
+          handler: handleVenueAdded
+        - event: VenueFeesUpdated(indexed uint256,uint256)
+          handler: handleVenueFeesUpdated
+      file: venue\venue.wasm
+  - kind: ethereum/contract
+    name: events
+    network: matic
+    source:
+      address: "0x71c2592C6424E1822F35841b40F0FE9dbFcEcF64"
+      abi: events
+      startBlock: 40332081
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscripts
+      entities:
+        - EventList
+      abis:
+        - name: events
+          file: events\abis\events.json
+      eventHandlers:
+        - event: EventAdded(indexed
+            uint256,string,uint256,bool,bool,address,uint256,uint256,address)
+          handler: handleEventAdded
+        - event: Featured(indexed uint256,bool)
+          handler: handleFeatured
+        - event: Favourite(address,indexed uint256,bool)
+          handler: handleFavourite
+        - event: EventPaid(indexed uint256,bool,uint256)
+          handler: handleEventPaid
+        - event: EventUpdated(indexed uint256,string,uint256,uint256,uint256)
+          handler: handleTimeUpdated
+        - event: VenueFeesRefunded(indexed uint256,address)
+          handler: handleVenueRefund
+        - event: Joined(indexed uint256,indexed address,uint256,uint256)
+          handler: handleJoined
+      file: venue\venue.wasm
+  - kind: ethereum/contract
+    name: admin
+    network: matic
+    source:
+      address: "0x9E4FaeEDc23da50bB3D18AA51F9Cc27f1611a2a7"
+      abi: admin
+      startBlock: 40331360
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscripts
+      entities:
+        - EventList
+      abis:
+        - name: admin
+          file: admin\abis\admin.json
+      eventHandlers:
+        - event: WhiteList(address,bool)
+          handler: handleWhiteList
+        - event: Erc20TokenUpdated(indexed address,bool,string,string,uint256)
+          handler: handleErc20TokenUpdatedEvent
+        - event: Erc721TokenUpdated(indexed uint256,indexed
+            address,bool,uint256,string,string,uint256)
+          handler: handleErc721TokenUpdatedEvent
+        - event: PlatformFeeUpdated(uint256)
+          handler: handlePlatformFee
+        - event: EventStatusUpdated(bool)
+          handler: handleEventStatus
+        - event: VenueRentalCommissionUpdated(uint256)
+          handler: handleRentalCommission
+        - event: BaseTokenUpdated(indexed address,string,string,uint256)
+          handler: handleBaseTokenUpdated
+      file: venue\venue.wasm
+  - kind: ethereum/contract
+    name: conversion
+    network: matic
+    source:
+      address: "0x5Ee0441C6cdf1e166e438615Afb8401c96c5E5c0"
+      abi: conversion
+      startBlock: 40327129
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscripts
+      entities:
+        - EventList
+      abis:
+        - name: conversion
+          file: conversion\abis\conversion.json
+      eventHandlers:
+        - event: Erc20Details(indexed address,string,string,uint256)
+          handler: handleErc20Details
+        - event: Erc721Details(indexed address,string,string)
+          handler: handleErc721Details
+      file: venue\venue.wasm
+  - kind: ethereum/contract
+    name: manageEvent
+    network: matic
+    source:
+      address: "0xb8A839E6D70dAd03f08B9c5c9BD78d927C2D1759"
+      abi: manageEvent
+      startBlock: 40332432
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Agenda
+      abis:
+        - name: manageEvent
+          file: manageEvent\abis\manageEvent.json
+      eventHandlers:
+        - event: AgendaAdded(indexed uint256,uint256,uint256,uint256,string,string[],string[],uint8)
+          handler: handleAgendaAdded
+        - event: AgendaStarted(indexed uint256,uint256)
+          handler: handleAgendaStarted
+        - event: AgendaDeleted(indexed uint256,indexed uint256,bool)
+          handler: handleAgendaDeleted
+        - event: AgendaUpdated(indexed
+            uint256,uint256,uint256,uint256,string,string[],string[],uint8)
+          handler: handleAgendaUpdated
+        - event: EventStarted(indexed uint256)
+          handler: handleEventStarted
+        - event: EventCancelled(indexed uint256)
+          handler: handleCanceledEvent
+        - event: EventEnded(indexed uint256)
+          handler: handleEventEnded
+        - event: EventCompleted(indexed uint256)
+          handler: handleEventCompleted
+        - event: Exited(indexed uint256,indexed address,uint256,uint256)
+          handler: handleEventExited
+        - event: TicketFeesRefund(indexed uint256,address,uint256)
+          handler: handleTicketRefund
+      file: venue\venue.wasm
+  - kind: ethereum/contract
+    name: ticketMaster
+    network: matic
+    source:
+      address: "0x1d967fa86A191A710af564dF7fa05D9Ee0E86616"
+      abi: ticketMaster
+      startBlock: 40334231
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscripts
+      entities:
+        - EventList
+      abis:
+        - name: ticketMaster
+          file: ticketMaster\abis\ticketMaster.json
+      eventHandlers:
+        - event: Bought(indexed uint256,indexed address,uint256,address,uint256)
+          handler: handleTicketBought
+      file: venue\venue.wasm
+templates:
+  - kind: ethereum/contract
+    name: ticket
+    network: matic
+    source:
+      abi: ticket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: venue\venue.wasm
+      entities:
+        - VenueList
+      abis:
+        - name: ticket
+          file: ticket\abis\ticket.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTicketTransfer

@@ -1,0 +1,228 @@
+type VenueList @entity {
+  id: ID!
+  venueId: BigInt
+  name: String
+  location: String
+  category: String
+  totalCapacity: BigInt
+  rentPerBlock: BigInt
+  tokenCID: String
+  transactionHash: String
+  timestamp: BigInt
+}
+
+type VenueRental @entity {
+  id: ID!
+  venueRentalCommission: BigInt!
+}
+
+type EventList @entity {
+  id: ID!
+  eventTokenId: BigInt
+  venueTokenId: BigInt
+  eventName: String
+  eventCategory: String
+  eventDescription: String
+  eventStartTime: BigInt
+  eventEndTime: BigInt
+  tokenCID: String
+  isVenueFeesPaid: Boolean
+  isPaid: Boolean
+  ticketPrice: BigInt
+  transactionHash: String
+  timestamp: BigInt
+  eventOrganiserAddress: Bytes
+  isFeatured: Boolean
+  burnStatus: String
+  eventStatus: String
+  tokenAddress: Bytes
+  venueFeeAmount: BigInt
+  ticketNFTAddress: Bytes
+  isEventCanceled: Boolean
+  isEventCompleted: Boolean
+  canceledTime: BigInt
+  isEventStarted: Boolean
+  isEventEnded: Boolean
+  participantsList: [Join]!
+  ticketBoughtList: [TicketBought]!
+  ticketBalance: [TicketBalance]!
+  conversionAddress: Bytes
+}
+
+type PlatformFee @entity {
+  id: ID!
+  PlatformFeePercent: BigInt
+}
+
+type IsEventPublic @entity {
+  id: ID!
+  eventContract: Bytes
+  eventStatus: Boolean
+}
+
+type BaseToken @entity {
+  id: ID!
+  baseTokenAddress: Bytes
+  tokenName: String
+  tokenSymbol: String
+  tokenDecimal: BigInt
+}
+
+type WhiteList @entity {
+  id: ID!
+  userAddress: Bytes
+  status: Boolean
+}
+
+type Erc20TokenEvent @entity {
+  id: ID!
+  tokenAddress: Bytes
+  status: Boolean
+  tokenName: String
+  tokenSymbol: String
+  tokenDecimal: BigInt
+}
+
+type Erc721EventToken @entity{
+  id: ID!
+  tokenAddress: Bytes
+  eventTokenId: BigInt
+  tokenName: String
+  tokenSymbol: String
+  tokenDecimal: String
+  status: Boolean
+  freePass: BigInt
+}
+
+type Favourite @entity {
+  id: ID!
+  userAddress: Bytes
+  eventTokenId: BigInt
+  isFavourite: Boolean
+}
+
+type BookedTime @entity {
+  id: ID!
+  venueId: BigInt
+  eventTokenId: [BigInt!]
+  eventStartTime: [BigInt!]
+  eventEndTime: [BigInt!]
+  name: String
+  location: String
+  category: String
+  totalCapacity: BigInt
+  rentPerBlock: BigInt
+  tokenCID: String
+  transactionHash: String
+  timestamp: BigInt
+  times: [EventTime]!
+}
+
+type EventTime @entity {
+  id: ID!
+  venueId: BigInt
+  eventTokenId: BigInt
+  eventStartTime: BigInt
+  eventEndTime: BigInt
+  isEventCanceled: Boolean
+}
+
+type Agenda @entity {
+  id: ID!
+  agendaId: BigInt
+  eventTokenId: BigInt
+  agendaStartTime: BigInt
+  agendaEndTime: BigInt
+  agendaName: String
+  agendaStatus: String
+  guestName: [String!]
+  guestAddress: [String!]
+  initiateStatus: Int
+  isAgendaDeleted: Boolean
+} 
+
+type History @entity {
+  id: ID!
+  eventTokenId: BigInt
+  data: [String!]
+  userAddress: Bytes
+}
+
+type Join @entity {
+  id: ID!
+  eventTokenId: BigInt
+  userAddress: Bytes
+  joinTime: BigInt
+  ticketId: BigInt
+  isJoined: Boolean
+}
+
+type Exit @entity {
+  id: ID!
+  eventTokenId: BigInt
+  userAddress: Bytes
+  leavingTime: BigInt
+  ticketId: BigInt
+
+}
+
+type TicketBought @entity{
+  id: ID!
+  eventTokenId: BigInt
+  ticketId: BigInt
+  userAddress: Bytes
+  tokenAddress: Bytes
+  ticketFeeAmount: BigInt
+}
+
+type TicketBalance @entity{
+  id: ID!
+  ticketId: BigInt
+  ownerAddress: Bytes
+  from: Bytes
+  ticketNFTAddress: Bytes
+  isUsed: Boolean
+  balance: BigInt
+  tokenAddress: Bytes
+  ticketFeeAmount: BigInt
+  eventTokenId: BigInt
+
+}
+
+type TicketRefund @entity{
+  id: ID!
+  eventTokenId: BigInt
+  ticketId: BigInt
+  userAddress: Bytes
+  refundStatus: Boolean
+}
+
+type VenueRefund @entity{
+  id: ID!
+  eventTokenId: BigInt
+  eventOrganiser: Bytes
+  refundStatus: Boolean
+}
+
+type EventId @entity {
+  id: ID!
+  eventId: BigInt
+  ticketNFTAddress: Bytes
+}
+
+type Erc721UserToken @entity {
+  id: ID!
+  owner: Bytes
+  from: Bytes
+  tokenID: BigInt
+  nftContractAddress: Bytes
+  balance: BigInt
+  isUsed: Boolean
+}
+
+type isTokenUsed @entity {
+  id: ID!
+  nftContractAddress: Bytes
+  tokenID: BigInt
+  isUsed: Boolean
+}
