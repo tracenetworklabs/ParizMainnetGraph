@@ -10,6 +10,28 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class ActiveStatusUpdated extends ethereum.Event {
+  get params(): ActiveStatusUpdated__Params {
+    return new ActiveStatusUpdated__Params(this);
+  }
+}
+
+export class ActiveStatusUpdated__Params {
+  _event: ActiveStatusUpdated;
+
+  constructor(event: ActiveStatusUpdated) {
+    this._event = event;
+  }
+
+  get tokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get active(): boolean {
+    return this._event.parameters[1].value.toBoolean();
+  }
+}
+
 export class Approval extends ethereum.Event {
   get params(): Approval__Params {
     return new Approval__Params(this);
@@ -604,6 +626,25 @@ export class venue extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  isActive(param0: BigInt): boolean {
+    let result = super.call("isActive", "isActive(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
+    ]);
+
+    return result[0].toBoolean();
+  }
+
+  try_isActive(param0: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall("isActive", "isActive(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   isApprovedForAll(owner: Address, operator: Address): boolean {
     let result = super.call(
       "isApprovedForAll",
@@ -755,6 +796,40 @@ export class venue extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
+  }
+}
+
+export class ActiveStatusCall extends ethereum.Call {
+  get inputs(): ActiveStatusCall__Inputs {
+    return new ActiveStatusCall__Inputs(this);
+  }
+
+  get outputs(): ActiveStatusCall__Outputs {
+    return new ActiveStatusCall__Outputs(this);
+  }
+}
+
+export class ActiveStatusCall__Inputs {
+  _call: ActiveStatusCall;
+
+  constructor(call: ActiveStatusCall) {
+    this._call = call;
+  }
+
+  get tokenId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get _status(): boolean {
+    return this._call.inputValues[1].value.toBoolean();
+  }
+}
+
+export class ActiveStatusCall__Outputs {
+  _call: ActiveStatusCall;
+
+  constructor(call: ActiveStatusCall) {
+    this._call = call;
   }
 }
 

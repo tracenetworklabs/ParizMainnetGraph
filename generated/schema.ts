@@ -194,6 +194,15 @@ export class VenueList extends Entity {
       this.set("timestamp", Value.fromBigInt(value as BigInt));
     }
   }
+
+  get isActive(): boolean {
+    let value = this.get("isActive");
+    return value.toBoolean();
+  }
+
+  set isActive(value: boolean) {
+    this.set("isActive", Value.fromBoolean(value));
+  }
 }
 
 export class VenueRental extends Entity {
@@ -1497,6 +1506,15 @@ export class BookedTime extends Entity {
     } else {
       this.set("timestamp", Value.fromBigInt(value as BigInt));
     }
+  }
+
+  get isActive(): boolean {
+    let value = this.get("isActive");
+    return value.toBoolean();
+  }
+
+  set isActive(value: boolean) {
+    this.set("isActive", Value.fromBoolean(value));
   }
 
   get times(): Array<string | null> {

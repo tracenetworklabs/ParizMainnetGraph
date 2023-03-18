@@ -1,7 +1,8 @@
 import { Address, BigInt, Bytes, DataSourceTemplate } from "@graphprotocol/graph-ts";
 import {
   VenueAdded,
-  VenueFeesUpdated
+  VenueFeesUpdated,
+  ActiveStatusUpdated
 } from "../generated/Venue/Venue";
 
 import {
@@ -37,9 +38,9 @@ import {
   BaseTokenUpdated
 } from "../generated/admin/admin";
 
-// import {
-//   DataAdded
-// } from "../generated/history/history";
+import {
+  DataAdded
+} from "../generated/history/history";
 
 import {
   AgendaAdded,
@@ -407,6 +408,7 @@ export function handleVenueAdded(event: VenueAdded): void {
     entity.venueId = event.params.tokenId;
     entity.transactionHash = event.transaction.hash.toHex();
     entity.timestamp = event.block.timestamp;
+    entity.isActive = true;
     let token = BookedTime.load(event.params.tokenId.toString());
     if(!token) {
       token = new BookedTime(event.params.tokenId.toString());
@@ -419,6 +421,7 @@ export function handleVenueAdded(event: VenueAdded): void {
       token.venueId = event.params.tokenId;
       token.transactionHash = event.transaction.hash.toHex();
       token.timestamp = event.block.timestamp;
+      token.isActive = true;
       token.times = [null];
     }
     token.save();
@@ -442,6 +445,53 @@ export function handleVenueFeesUpdated(event: VenueFeesUpdated): void {
  tokenValue.save();
  token.save();
 
+}
+
+export function handleActiveStatusUpdated(event: ActiveStatusUpdated): void {
+  let token = VenueList.load(event.params.tokenId.toHex());
+  if(token) {
+    token.isActive = event.params.active;
+    token.venueId = event.params.tokenId;
+  }
+  let tokenValue = BookedTime.load(event.params.tokenId.toString());
+  if(tokenValue) {
+    tokenValue.isActive = event.params.active;
+    tokenValue.transactionHash = event.transaction.hash.toHex();
+    tokenValue.timestamp = event.block.timestamp;
+  }
+ tokenValue.save();
+ token.save();
+
+}
+
+export function handleDataAdded(event: DataAdded): void {
+  let token = History.load(event.params.tokenId.toString() + event.params.userAddress.toString());
+  if(!token) {
+    token = new History(event.params.tokenId.toString() + event.params.userAddress.toString());
+    token.eventTokenId = event.params.tokenId;
+    if(token.data.length == 0) {
+      let Data = token.data;
+      token.data = Data.concat([event.params.data]);
+    }
+    else {
+      let Data = token.data;
+      token.data = Data.concat([event.params.data]);
+    }
+    token.userAddress = event.params.userAddress;
+  }
+  else {
+    if(token.data.length == 0) {
+      let Data = token.data;
+      token.data = Data.concat([event.params.data]);
+    }
+    else {
+      let Data = token.data;
+      token.data = Data.concat([event.params.data]);
+    }
+    
+    token.userAddress = event.params.userAddress;
+  }
+  token.save();
 }
 
 /******************************* Manage Event Functions  *******************************************/

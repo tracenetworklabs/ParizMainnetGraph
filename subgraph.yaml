@@ -23,6 +23,8 @@ dataSources:
           handler: handleVenueAdded
         - event: VenueFeesUpdated(indexed uint256,uint256)
           handler: handleVenueFeesUpdated
+        - event: ActiveStatusUpdated(indexed uint256,bool)
+          handler: handleActiveStatusUpdated
       file: ./src/mapping.ts
       
   - kind: ethereum/contract
@@ -112,6 +114,27 @@ dataSources:
           handler: handleErc20Details
         - event: Erc721Details(indexed address,string,string)
           handler: handleErc721Details
+      file: ./src/mapping.ts
+        
+  - kind: ethereum/contract
+    name: history 
+    network: matic
+    source:
+      address: "0x5129b6D1EA5e00Acf18cdfEc75F07E944fe5ABe6"
+      abi: history
+      startBlock: 40406109
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscripts
+      entities:
+        - History
+      abis:
+        - name: history
+          file: ./abis/history.json
+      eventHandlers:
+        - event: DataAdded(indexed address,indexed uint256,string)
+          handler: handleDataAdded
       file: ./src/mapping.ts
 
   - kind: ethereum/contract
