@@ -6,7 +6,6 @@ import {
   Value,
   ValueKind,
   store,
-  Address,
   Bytes,
   BigInt,
   BigDecimal
@@ -20,22 +19,31 @@ export class VenueList extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save VenueList entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save VenueList entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("VenueList", id.toString(), this);
+    assert(id != null, "Cannot save VenueList entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type VenueList must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("VenueList", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): VenueList | null {
+    return changetype<VenueList | null>(store.get_in_block("VenueList", id));
   }
 
   static load(id: string): VenueList | null {
-    return store.get("VenueList", id) as VenueList | null;
+    return changetype<VenueList | null>(store.get("VenueList", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -44,7 +52,7 @@ export class VenueList extends Entity {
 
   get venueId(): BigInt | null {
     let value = this.get("venueId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -52,16 +60,16 @@ export class VenueList extends Entity {
   }
 
   set venueId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("venueId");
     } else {
-      this.set("venueId", Value.fromBigInt(value as BigInt));
+      this.set("venueId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get name(): string | null {
     let value = this.get("name");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -69,16 +77,16 @@ export class VenueList extends Entity {
   }
 
   set name(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("name");
     } else {
-      this.set("name", Value.fromString(value as string));
+      this.set("name", Value.fromString(<string>value));
     }
   }
 
   get location(): string | null {
     let value = this.get("location");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -86,16 +94,16 @@ export class VenueList extends Entity {
   }
 
   set location(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("location");
     } else {
-      this.set("location", Value.fromString(value as string));
+      this.set("location", Value.fromString(<string>value));
     }
   }
 
   get category(): string | null {
     let value = this.get("category");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -103,16 +111,16 @@ export class VenueList extends Entity {
   }
 
   set category(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("category");
     } else {
-      this.set("category", Value.fromString(value as string));
+      this.set("category", Value.fromString(<string>value));
     }
   }
 
   get totalCapacity(): BigInt | null {
     let value = this.get("totalCapacity");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -120,16 +128,16 @@ export class VenueList extends Entity {
   }
 
   set totalCapacity(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("totalCapacity");
     } else {
-      this.set("totalCapacity", Value.fromBigInt(value as BigInt));
+      this.set("totalCapacity", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get rentPerBlock(): BigInt | null {
     let value = this.get("rentPerBlock");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -137,16 +145,16 @@ export class VenueList extends Entity {
   }
 
   set rentPerBlock(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("rentPerBlock");
     } else {
-      this.set("rentPerBlock", Value.fromBigInt(value as BigInt));
+      this.set("rentPerBlock", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get tokenCID(): string | null {
     let value = this.get("tokenCID");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -154,16 +162,16 @@ export class VenueList extends Entity {
   }
 
   set tokenCID(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenCID");
     } else {
-      this.set("tokenCID", Value.fromString(value as string));
+      this.set("tokenCID", Value.fromString(<string>value));
     }
   }
 
   get transactionHash(): string | null {
     let value = this.get("transactionHash");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -171,16 +179,16 @@ export class VenueList extends Entity {
   }
 
   set transactionHash(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("transactionHash");
     } else {
-      this.set("transactionHash", Value.fromString(value as string));
+      this.set("transactionHash", Value.fromString(<string>value));
     }
   }
 
   get timestamp(): BigInt | null {
     let value = this.get("timestamp");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -188,20 +196,41 @@ export class VenueList extends Entity {
   }
 
   set timestamp(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("timestamp");
     } else {
-      this.set("timestamp", Value.fromBigInt(value as BigInt));
+      this.set("timestamp", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get isActive(): boolean {
     let value = this.get("isActive");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isActive(value: boolean) {
     this.set("isActive", Value.fromBoolean(value));
+  }
+
+  get venueOwner(): Bytes | null {
+    let value = this.get("venueOwner");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set venueOwner(value: Bytes | null) {
+    if (!value) {
+      this.unset("venueOwner");
+    } else {
+      this.set("venueOwner", Value.fromBytes(<Bytes>value));
+    }
   }
 }
 
@@ -213,22 +242,33 @@ export class VenueRental extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save VenueRental entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save VenueRental entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
+    assert(id != null, "Cannot save VenueRental entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type VenueRental must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("VenueRental", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): VenueRental | null {
+    return changetype<VenueRental | null>(
+      store.get_in_block("VenueRental", id)
     );
-    store.set("VenueRental", id.toString(), this);
   }
 
   static load(id: string): VenueRental | null {
-    return store.get("VenueRental", id) as VenueRental | null;
+    return changetype<VenueRental | null>(store.get("VenueRental", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -237,7 +277,11 @@ export class VenueRental extends Entity {
 
   get venueRentalCommission(): BigInt {
     let value = this.get("venueRentalCommission");
-    return value.toBigInt();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
   }
 
   set venueRentalCommission(value: BigInt) {
@@ -253,22 +297,31 @@ export class EventList extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save EventList entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save EventList entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("EventList", id.toString(), this);
+    assert(id != null, "Cannot save EventList entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type EventList must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("EventList", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): EventList | null {
+    return changetype<EventList | null>(store.get_in_block("EventList", id));
   }
 
   static load(id: string): EventList | null {
-    return store.get("EventList", id) as EventList | null;
+    return changetype<EventList | null>(store.get("EventList", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -277,7 +330,7 @@ export class EventList extends Entity {
 
   get eventTokenId(): BigInt | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -285,16 +338,16 @@ export class EventList extends Entity {
   }
 
   set eventTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigInt(value as BigInt));
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get venueTokenId(): BigInt | null {
     let value = this.get("venueTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -302,16 +355,33 @@ export class EventList extends Entity {
   }
 
   set venueTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("venueTokenId");
     } else {
-      this.set("venueTokenId", Value.fromBigInt(value as BigInt));
+      this.set("venueTokenId", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get venueVersion(): string | null {
+    let value = this.get("venueVersion");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set venueVersion(value: string | null) {
+    if (!value) {
+      this.unset("venueVersion");
+    } else {
+      this.set("venueVersion", Value.fromString(<string>value));
     }
   }
 
   get eventName(): string | null {
     let value = this.get("eventName");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -319,16 +389,16 @@ export class EventList extends Entity {
   }
 
   set eventName(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventName");
     } else {
-      this.set("eventName", Value.fromString(value as string));
+      this.set("eventName", Value.fromString(<string>value));
     }
   }
 
   get eventCategory(): string | null {
     let value = this.get("eventCategory");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -336,16 +406,16 @@ export class EventList extends Entity {
   }
 
   set eventCategory(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventCategory");
     } else {
-      this.set("eventCategory", Value.fromString(value as string));
+      this.set("eventCategory", Value.fromString(<string>value));
     }
   }
 
   get eventDescription(): string | null {
     let value = this.get("eventDescription");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -353,16 +423,16 @@ export class EventList extends Entity {
   }
 
   set eventDescription(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventDescription");
     } else {
-      this.set("eventDescription", Value.fromString(value as string));
+      this.set("eventDescription", Value.fromString(<string>value));
     }
   }
 
   get eventStartTime(): BigInt | null {
     let value = this.get("eventStartTime");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -370,16 +440,16 @@ export class EventList extends Entity {
   }
 
   set eventStartTime(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventStartTime");
     } else {
-      this.set("eventStartTime", Value.fromBigInt(value as BigInt));
+      this.set("eventStartTime", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get eventEndTime(): BigInt | null {
     let value = this.get("eventEndTime");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -387,16 +457,16 @@ export class EventList extends Entity {
   }
 
   set eventEndTime(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventEndTime");
     } else {
-      this.set("eventEndTime", Value.fromBigInt(value as BigInt));
+      this.set("eventEndTime", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get tokenCID(): string | null {
     let value = this.get("tokenCID");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -404,16 +474,20 @@ export class EventList extends Entity {
   }
 
   set tokenCID(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenCID");
     } else {
-      this.set("tokenCID", Value.fromString(value as string));
+      this.set("tokenCID", Value.fromString(<string>value));
     }
   }
 
   get isVenueFeesPaid(): boolean {
     let value = this.get("isVenueFeesPaid");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isVenueFeesPaid(value: boolean) {
@@ -422,7 +496,11 @@ export class EventList extends Entity {
 
   get isPaid(): boolean {
     let value = this.get("isPaid");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isPaid(value: boolean) {
@@ -431,7 +509,7 @@ export class EventList extends Entity {
 
   get ticketPrice(): BigInt | null {
     let value = this.get("ticketPrice");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -439,16 +517,16 @@ export class EventList extends Entity {
   }
 
   set ticketPrice(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("ticketPrice");
     } else {
-      this.set("ticketPrice", Value.fromBigInt(value as BigInt));
+      this.set("ticketPrice", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get transactionHash(): string | null {
     let value = this.get("transactionHash");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -456,16 +534,16 @@ export class EventList extends Entity {
   }
 
   set transactionHash(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("transactionHash");
     } else {
-      this.set("transactionHash", Value.fromString(value as string));
+      this.set("transactionHash", Value.fromString(<string>value));
     }
   }
 
   get timestamp(): BigInt | null {
     let value = this.get("timestamp");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -473,16 +551,16 @@ export class EventList extends Entity {
   }
 
   set timestamp(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("timestamp");
     } else {
-      this.set("timestamp", Value.fromBigInt(value as BigInt));
+      this.set("timestamp", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get eventOrganiserAddress(): Bytes | null {
     let value = this.get("eventOrganiserAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -490,16 +568,20 @@ export class EventList extends Entity {
   }
 
   set eventOrganiserAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventOrganiserAddress");
     } else {
-      this.set("eventOrganiserAddress", Value.fromBytes(value as Bytes));
+      this.set("eventOrganiserAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get isFeatured(): boolean {
     let value = this.get("isFeatured");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isFeatured(value: boolean) {
@@ -508,7 +590,7 @@ export class EventList extends Entity {
 
   get burnStatus(): string | null {
     let value = this.get("burnStatus");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -516,16 +598,16 @@ export class EventList extends Entity {
   }
 
   set burnStatus(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("burnStatus");
     } else {
-      this.set("burnStatus", Value.fromString(value as string));
+      this.set("burnStatus", Value.fromString(<string>value));
     }
   }
 
   get eventStatus(): string | null {
     let value = this.get("eventStatus");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -533,16 +615,16 @@ export class EventList extends Entity {
   }
 
   set eventStatus(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventStatus");
     } else {
-      this.set("eventStatus", Value.fromString(value as string));
+      this.set("eventStatus", Value.fromString(<string>value));
     }
   }
 
   get tokenAddress(): Bytes | null {
     let value = this.get("tokenAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -550,16 +632,16 @@ export class EventList extends Entity {
   }
 
   set tokenAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenAddress");
     } else {
-      this.set("tokenAddress", Value.fromBytes(value as Bytes));
+      this.set("tokenAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get venueFeeAmount(): BigInt | null {
     let value = this.get("venueFeeAmount");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -567,16 +649,16 @@ export class EventList extends Entity {
   }
 
   set venueFeeAmount(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("venueFeeAmount");
     } else {
-      this.set("venueFeeAmount", Value.fromBigInt(value as BigInt));
+      this.set("venueFeeAmount", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get ticketNFTAddress(): Bytes | null {
     let value = this.get("ticketNFTAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -584,16 +666,20 @@ export class EventList extends Entity {
   }
 
   set ticketNFTAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("ticketNFTAddress");
     } else {
-      this.set("ticketNFTAddress", Value.fromBytes(value as Bytes));
+      this.set("ticketNFTAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get isEventCanceled(): boolean {
     let value = this.get("isEventCanceled");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isEventCanceled(value: boolean) {
@@ -602,7 +688,11 @@ export class EventList extends Entity {
 
   get isEventCompleted(): boolean {
     let value = this.get("isEventCompleted");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isEventCompleted(value: boolean) {
@@ -611,7 +701,7 @@ export class EventList extends Entity {
 
   get canceledTime(): BigInt | null {
     let value = this.get("canceledTime");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -619,16 +709,20 @@ export class EventList extends Entity {
   }
 
   set canceledTime(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("canceledTime");
     } else {
-      this.set("canceledTime", Value.fromBigInt(value as BigInt));
+      this.set("canceledTime", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get isEventStarted(): boolean {
     let value = this.get("isEventStarted");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isEventStarted(value: boolean) {
@@ -637,43 +731,59 @@ export class EventList extends Entity {
 
   get isEventEnded(): boolean {
     let value = this.get("isEventEnded");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isEventEnded(value: boolean) {
     this.set("isEventEnded", Value.fromBoolean(value));
   }
 
-  get participantsList(): Array<string | null> {
+  get participantsList(): Array<string> {
     let value = this.get("participantsList");
-    return value.toStringArray();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set participantsList(value: Array<string | null>) {
+  set participantsList(value: Array<string>) {
     this.set("participantsList", Value.fromStringArray(value));
   }
 
-  get ticketBoughtList(): Array<string | null> {
+  get ticketBoughtList(): Array<string> {
     let value = this.get("ticketBoughtList");
-    return value.toStringArray();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set ticketBoughtList(value: Array<string | null>) {
+  set ticketBoughtList(value: Array<string>) {
     this.set("ticketBoughtList", Value.fromStringArray(value));
   }
 
-  get ticketBalance(): Array<string | null> {
+  get ticketBalance(): Array<string> {
     let value = this.get("ticketBalance");
-    return value.toStringArray();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set ticketBalance(value: Array<string | null>) {
+  set ticketBalance(value: Array<string>) {
     this.set("ticketBalance", Value.fromStringArray(value));
   }
 
   get conversionAddress(): Bytes | null {
     let value = this.get("conversionAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -681,10 +791,10 @@ export class EventList extends Entity {
   }
 
   set conversionAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("conversionAddress");
     } else {
-      this.set("conversionAddress", Value.fromBytes(value as Bytes));
+      this.set("conversionAddress", Value.fromBytes(<Bytes>value));
     }
   }
 }
@@ -697,22 +807,33 @@ export class PlatformFee extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save PlatformFee entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save PlatformFee entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
+    assert(id != null, "Cannot save PlatformFee entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type PlatformFee must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("PlatformFee", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): PlatformFee | null {
+    return changetype<PlatformFee | null>(
+      store.get_in_block("PlatformFee", id)
     );
-    store.set("PlatformFee", id.toString(), this);
   }
 
   static load(id: string): PlatformFee | null {
-    return store.get("PlatformFee", id) as PlatformFee | null;
+    return changetype<PlatformFee | null>(store.get("PlatformFee", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -721,7 +842,7 @@ export class PlatformFee extends Entity {
 
   get PlatformFeePercent(): BigInt | null {
     let value = this.get("PlatformFeePercent");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -729,10 +850,10 @@ export class PlatformFee extends Entity {
   }
 
   set PlatformFeePercent(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("PlatformFeePercent");
     } else {
-      this.set("PlatformFeePercent", Value.fromBigInt(value as BigInt));
+      this.set("PlatformFeePercent", Value.fromBigInt(<BigInt>value));
     }
   }
 }
@@ -745,22 +866,33 @@ export class IsEventPublic extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save IsEventPublic entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save IsEventPublic entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
+    assert(id != null, "Cannot save IsEventPublic entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type IsEventPublic must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("IsEventPublic", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): IsEventPublic | null {
+    return changetype<IsEventPublic | null>(
+      store.get_in_block("IsEventPublic", id)
     );
-    store.set("IsEventPublic", id.toString(), this);
   }
 
   static load(id: string): IsEventPublic | null {
-    return store.get("IsEventPublic", id) as IsEventPublic | null;
+    return changetype<IsEventPublic | null>(store.get("IsEventPublic", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -769,7 +901,7 @@ export class IsEventPublic extends Entity {
 
   get eventContract(): Bytes | null {
     let value = this.get("eventContract");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -777,16 +909,20 @@ export class IsEventPublic extends Entity {
   }
 
   set eventContract(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventContract");
     } else {
-      this.set("eventContract", Value.fromBytes(value as Bytes));
+      this.set("eventContract", Value.fromBytes(<Bytes>value));
     }
   }
 
   get eventStatus(): boolean {
     let value = this.get("eventStatus");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set eventStatus(value: boolean) {
@@ -802,22 +938,31 @@ export class BaseToken extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save BaseToken entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save BaseToken entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("BaseToken", id.toString(), this);
+    assert(id != null, "Cannot save BaseToken entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type BaseToken must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("BaseToken", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): BaseToken | null {
+    return changetype<BaseToken | null>(store.get_in_block("BaseToken", id));
   }
 
   static load(id: string): BaseToken | null {
-    return store.get("BaseToken", id) as BaseToken | null;
+    return changetype<BaseToken | null>(store.get("BaseToken", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -826,7 +971,7 @@ export class BaseToken extends Entity {
 
   get baseTokenAddress(): Bytes | null {
     let value = this.get("baseTokenAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -834,16 +979,16 @@ export class BaseToken extends Entity {
   }
 
   set baseTokenAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("baseTokenAddress");
     } else {
-      this.set("baseTokenAddress", Value.fromBytes(value as Bytes));
+      this.set("baseTokenAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get tokenName(): string | null {
     let value = this.get("tokenName");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -851,16 +996,16 @@ export class BaseToken extends Entity {
   }
 
   set tokenName(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenName");
     } else {
-      this.set("tokenName", Value.fromString(value as string));
+      this.set("tokenName", Value.fromString(<string>value));
     }
   }
 
   get tokenSymbol(): string | null {
     let value = this.get("tokenSymbol");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -868,16 +1013,16 @@ export class BaseToken extends Entity {
   }
 
   set tokenSymbol(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenSymbol");
     } else {
-      this.set("tokenSymbol", Value.fromString(value as string));
+      this.set("tokenSymbol", Value.fromString(<string>value));
     }
   }
 
   get tokenDecimal(): BigInt | null {
     let value = this.get("tokenDecimal");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -885,10 +1030,10 @@ export class BaseToken extends Entity {
   }
 
   set tokenDecimal(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenDecimal");
     } else {
-      this.set("tokenDecimal", Value.fromBigInt(value as BigInt));
+      this.set("tokenDecimal", Value.fromBigInt(<BigInt>value));
     }
   }
 }
@@ -901,22 +1046,31 @@ export class WhiteList extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save WhiteList entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save WhiteList entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("WhiteList", id.toString(), this);
+    assert(id != null, "Cannot save WhiteList entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type WhiteList must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("WhiteList", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): WhiteList | null {
+    return changetype<WhiteList | null>(store.get_in_block("WhiteList", id));
   }
 
   static load(id: string): WhiteList | null {
-    return store.get("WhiteList", id) as WhiteList | null;
+    return changetype<WhiteList | null>(store.get("WhiteList", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -925,7 +1079,7 @@ export class WhiteList extends Entity {
 
   get userAddress(): Bytes | null {
     let value = this.get("userAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -933,16 +1087,20 @@ export class WhiteList extends Entity {
   }
 
   set userAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("userAddress");
     } else {
-      this.set("userAddress", Value.fromBytes(value as Bytes));
+      this.set("userAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get status(): boolean {
     let value = this.get("status");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set status(value: boolean) {
@@ -958,22 +1116,33 @@ export class Erc20TokenEvent extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Erc20TokenEvent entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Erc20TokenEvent entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
+    assert(id != null, "Cannot save Erc20TokenEvent entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Erc20TokenEvent must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Erc20TokenEvent", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): Erc20TokenEvent | null {
+    return changetype<Erc20TokenEvent | null>(
+      store.get_in_block("Erc20TokenEvent", id)
     );
-    store.set("Erc20TokenEvent", id.toString(), this);
   }
 
   static load(id: string): Erc20TokenEvent | null {
-    return store.get("Erc20TokenEvent", id) as Erc20TokenEvent | null;
+    return changetype<Erc20TokenEvent | null>(store.get("Erc20TokenEvent", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -982,7 +1151,7 @@ export class Erc20TokenEvent extends Entity {
 
   get tokenAddress(): Bytes | null {
     let value = this.get("tokenAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -990,25 +1159,46 @@ export class Erc20TokenEvent extends Entity {
   }
 
   set tokenAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenAddress");
     } else {
-      this.set("tokenAddress", Value.fromBytes(value as Bytes));
+      this.set("tokenAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get status(): boolean {
     let value = this.get("status");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set status(value: boolean) {
     this.set("status", Value.fromBoolean(value));
   }
 
+  get eventTokenId(): BigInt | null {
+    let value = this.get("eventTokenId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set eventTokenId(value: BigInt | null) {
+    if (!value) {
+      this.unset("eventTokenId");
+    } else {
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
   get tokenName(): string | null {
     let value = this.get("tokenName");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1016,16 +1206,16 @@ export class Erc20TokenEvent extends Entity {
   }
 
   set tokenName(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenName");
     } else {
-      this.set("tokenName", Value.fromString(value as string));
+      this.set("tokenName", Value.fromString(<string>value));
     }
   }
 
   get tokenSymbol(): string | null {
     let value = this.get("tokenSymbol");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1033,16 +1223,16 @@ export class Erc20TokenEvent extends Entity {
   }
 
   set tokenSymbol(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenSymbol");
     } else {
-      this.set("tokenSymbol", Value.fromString(value as string));
+      this.set("tokenSymbol", Value.fromString(<string>value));
     }
   }
 
   get tokenDecimal(): BigInt | null {
     let value = this.get("tokenDecimal");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1050,10 +1240,10 @@ export class Erc20TokenEvent extends Entity {
   }
 
   set tokenDecimal(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenDecimal");
     } else {
-      this.set("tokenDecimal", Value.fromBigInt(value as BigInt));
+      this.set("tokenDecimal", Value.fromBigInt(<BigInt>value));
     }
   }
 }
@@ -1066,22 +1256,35 @@ export class Erc721EventToken extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Erc721EventToken entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Erc721EventToken entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
+    assert(id != null, "Cannot save Erc721EventToken entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Erc721EventToken must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Erc721EventToken", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): Erc721EventToken | null {
+    return changetype<Erc721EventToken | null>(
+      store.get_in_block("Erc721EventToken", id)
     );
-    store.set("Erc721EventToken", id.toString(), this);
   }
 
   static load(id: string): Erc721EventToken | null {
-    return store.get("Erc721EventToken", id) as Erc721EventToken | null;
+    return changetype<Erc721EventToken | null>(
+      store.get("Erc721EventToken", id)
+    );
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -1090,7 +1293,7 @@ export class Erc721EventToken extends Entity {
 
   get tokenAddress(): Bytes | null {
     let value = this.get("tokenAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -1098,16 +1301,16 @@ export class Erc721EventToken extends Entity {
   }
 
   set tokenAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenAddress");
     } else {
-      this.set("tokenAddress", Value.fromBytes(value as Bytes));
+      this.set("tokenAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get eventTokenId(): BigInt | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1115,16 +1318,16 @@ export class Erc721EventToken extends Entity {
   }
 
   set eventTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigInt(value as BigInt));
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get tokenName(): string | null {
     let value = this.get("tokenName");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1132,16 +1335,16 @@ export class Erc721EventToken extends Entity {
   }
 
   set tokenName(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenName");
     } else {
-      this.set("tokenName", Value.fromString(value as string));
+      this.set("tokenName", Value.fromString(<string>value));
     }
   }
 
   get tokenSymbol(): string | null {
     let value = this.get("tokenSymbol");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1149,16 +1352,16 @@ export class Erc721EventToken extends Entity {
   }
 
   set tokenSymbol(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenSymbol");
     } else {
-      this.set("tokenSymbol", Value.fromString(value as string));
+      this.set("tokenSymbol", Value.fromString(<string>value));
     }
   }
 
   get tokenDecimal(): string | null {
     let value = this.get("tokenDecimal");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1166,16 +1369,20 @@ export class Erc721EventToken extends Entity {
   }
 
   set tokenDecimal(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenDecimal");
     } else {
-      this.set("tokenDecimal", Value.fromString(value as string));
+      this.set("tokenDecimal", Value.fromString(<string>value));
     }
   }
 
   get status(): boolean {
     let value = this.get("status");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set status(value: boolean) {
@@ -1184,7 +1391,7 @@ export class Erc721EventToken extends Entity {
 
   get freePass(): BigInt | null {
     let value = this.get("freePass");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1192,10 +1399,10 @@ export class Erc721EventToken extends Entity {
   }
 
   set freePass(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("freePass");
     } else {
-      this.set("freePass", Value.fromBigInt(value as BigInt));
+      this.set("freePass", Value.fromBigInt(<BigInt>value));
     }
   }
 }
@@ -1208,22 +1415,31 @@ export class Favourite extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Favourite entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Favourite entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Favourite", id.toString(), this);
+    assert(id != null, "Cannot save Favourite entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Favourite must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Favourite", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): Favourite | null {
+    return changetype<Favourite | null>(store.get_in_block("Favourite", id));
   }
 
   static load(id: string): Favourite | null {
-    return store.get("Favourite", id) as Favourite | null;
+    return changetype<Favourite | null>(store.get("Favourite", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -1232,7 +1448,7 @@ export class Favourite extends Entity {
 
   get userAddress(): Bytes | null {
     let value = this.get("userAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -1240,16 +1456,16 @@ export class Favourite extends Entity {
   }
 
   set userAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("userAddress");
     } else {
-      this.set("userAddress", Value.fromBytes(value as Bytes));
+      this.set("userAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get eventTokenId(): BigInt | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1257,16 +1473,20 @@ export class Favourite extends Entity {
   }
 
   set eventTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigInt(value as BigInt));
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get isFavourite(): boolean {
     let value = this.get("isFavourite");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isFavourite(value: boolean) {
@@ -1282,22 +1502,31 @@ export class BookedTime extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save BookedTime entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save BookedTime entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("BookedTime", id.toString(), this);
+    assert(id != null, "Cannot save BookedTime entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type BookedTime must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("BookedTime", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): BookedTime | null {
+    return changetype<BookedTime | null>(store.get_in_block("BookedTime", id));
   }
 
   static load(id: string): BookedTime | null {
-    return store.get("BookedTime", id) as BookedTime | null;
+    return changetype<BookedTime | null>(store.get("BookedTime", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -1306,7 +1535,7 @@ export class BookedTime extends Entity {
 
   get venueId(): BigInt | null {
     let value = this.get("venueId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1314,16 +1543,16 @@ export class BookedTime extends Entity {
   }
 
   set venueId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("venueId");
     } else {
-      this.set("venueId", Value.fromBigInt(value as BigInt));
+      this.set("venueId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get eventTokenId(): Array<BigInt> | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigIntArray();
@@ -1331,16 +1560,16 @@ export class BookedTime extends Entity {
   }
 
   set eventTokenId(value: Array<BigInt> | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigIntArray(value as Array<BigInt>));
+      this.set("eventTokenId", Value.fromBigIntArray(<Array<BigInt>>value));
     }
   }
 
   get eventStartTime(): Array<BigInt> | null {
     let value = this.get("eventStartTime");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigIntArray();
@@ -1348,16 +1577,16 @@ export class BookedTime extends Entity {
   }
 
   set eventStartTime(value: Array<BigInt> | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventStartTime");
     } else {
-      this.set("eventStartTime", Value.fromBigIntArray(value as Array<BigInt>));
+      this.set("eventStartTime", Value.fromBigIntArray(<Array<BigInt>>value));
     }
   }
 
   get eventEndTime(): Array<BigInt> | null {
     let value = this.get("eventEndTime");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigIntArray();
@@ -1365,16 +1594,16 @@ export class BookedTime extends Entity {
   }
 
   set eventEndTime(value: Array<BigInt> | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventEndTime");
     } else {
-      this.set("eventEndTime", Value.fromBigIntArray(value as Array<BigInt>));
+      this.set("eventEndTime", Value.fromBigIntArray(<Array<BigInt>>value));
     }
   }
 
   get name(): string | null {
     let value = this.get("name");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1382,16 +1611,16 @@ export class BookedTime extends Entity {
   }
 
   set name(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("name");
     } else {
-      this.set("name", Value.fromString(value as string));
+      this.set("name", Value.fromString(<string>value));
     }
   }
 
   get location(): string | null {
     let value = this.get("location");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1399,16 +1628,16 @@ export class BookedTime extends Entity {
   }
 
   set location(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("location");
     } else {
-      this.set("location", Value.fromString(value as string));
+      this.set("location", Value.fromString(<string>value));
     }
   }
 
   get category(): string | null {
     let value = this.get("category");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1416,16 +1645,16 @@ export class BookedTime extends Entity {
   }
 
   set category(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("category");
     } else {
-      this.set("category", Value.fromString(value as string));
+      this.set("category", Value.fromString(<string>value));
     }
   }
 
   get totalCapacity(): BigInt | null {
     let value = this.get("totalCapacity");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1433,16 +1662,16 @@ export class BookedTime extends Entity {
   }
 
   set totalCapacity(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("totalCapacity");
     } else {
-      this.set("totalCapacity", Value.fromBigInt(value as BigInt));
+      this.set("totalCapacity", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get rentPerBlock(): BigInt | null {
     let value = this.get("rentPerBlock");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1450,16 +1679,16 @@ export class BookedTime extends Entity {
   }
 
   set rentPerBlock(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("rentPerBlock");
     } else {
-      this.set("rentPerBlock", Value.fromBigInt(value as BigInt));
+      this.set("rentPerBlock", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get tokenCID(): string | null {
     let value = this.get("tokenCID");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1467,16 +1696,16 @@ export class BookedTime extends Entity {
   }
 
   set tokenCID(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenCID");
     } else {
-      this.set("tokenCID", Value.fromString(value as string));
+      this.set("tokenCID", Value.fromString(<string>value));
     }
   }
 
   get transactionHash(): string | null {
     let value = this.get("transactionHash");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1484,16 +1713,16 @@ export class BookedTime extends Entity {
   }
 
   set transactionHash(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("transactionHash");
     } else {
-      this.set("transactionHash", Value.fromString(value as string));
+      this.set("transactionHash", Value.fromString(<string>value));
     }
   }
 
   get timestamp(): BigInt | null {
     let value = this.get("timestamp");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1501,28 +1730,36 @@ export class BookedTime extends Entity {
   }
 
   set timestamp(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("timestamp");
     } else {
-      this.set("timestamp", Value.fromBigInt(value as BigInt));
+      this.set("timestamp", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get isActive(): boolean {
     let value = this.get("isActive");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isActive(value: boolean) {
     this.set("isActive", Value.fromBoolean(value));
   }
 
-  get times(): Array<string | null> {
+  get times(): Array<string> {
     let value = this.get("times");
-    return value.toStringArray();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set times(value: Array<string | null>) {
+  set times(value: Array<string>) {
     this.set("times", Value.fromStringArray(value));
   }
 }
@@ -1535,22 +1772,31 @@ export class EventTime extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save EventTime entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save EventTime entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("EventTime", id.toString(), this);
+    assert(id != null, "Cannot save EventTime entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type EventTime must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("EventTime", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): EventTime | null {
+    return changetype<EventTime | null>(store.get_in_block("EventTime", id));
   }
 
   static load(id: string): EventTime | null {
-    return store.get("EventTime", id) as EventTime | null;
+    return changetype<EventTime | null>(store.get("EventTime", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -1559,7 +1805,7 @@ export class EventTime extends Entity {
 
   get venueId(): BigInt | null {
     let value = this.get("venueId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1567,16 +1813,16 @@ export class EventTime extends Entity {
   }
 
   set venueId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("venueId");
     } else {
-      this.set("venueId", Value.fromBigInt(value as BigInt));
+      this.set("venueId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get eventTokenId(): BigInt | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1584,16 +1830,16 @@ export class EventTime extends Entity {
   }
 
   set eventTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigInt(value as BigInt));
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get eventStartTime(): BigInt | null {
     let value = this.get("eventStartTime");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1601,16 +1847,16 @@ export class EventTime extends Entity {
   }
 
   set eventStartTime(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventStartTime");
     } else {
-      this.set("eventStartTime", Value.fromBigInt(value as BigInt));
+      this.set("eventStartTime", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get eventEndTime(): BigInt | null {
     let value = this.get("eventEndTime");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1618,16 +1864,20 @@ export class EventTime extends Entity {
   }
 
   set eventEndTime(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventEndTime");
     } else {
-      this.set("eventEndTime", Value.fromBigInt(value as BigInt));
+      this.set("eventEndTime", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get isEventCanceled(): boolean {
     let value = this.get("isEventCanceled");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isEventCanceled(value: boolean) {
@@ -1643,22 +1893,31 @@ export class Agenda extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Agenda entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Agenda entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Agenda", id.toString(), this);
+    assert(id != null, "Cannot save Agenda entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Agenda must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Agenda", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): Agenda | null {
+    return changetype<Agenda | null>(store.get_in_block("Agenda", id));
   }
 
   static load(id: string): Agenda | null {
-    return store.get("Agenda", id) as Agenda | null;
+    return changetype<Agenda | null>(store.get("Agenda", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -1667,7 +1926,7 @@ export class Agenda extends Entity {
 
   get agendaId(): BigInt | null {
     let value = this.get("agendaId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1675,16 +1934,16 @@ export class Agenda extends Entity {
   }
 
   set agendaId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("agendaId");
     } else {
-      this.set("agendaId", Value.fromBigInt(value as BigInt));
+      this.set("agendaId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get eventTokenId(): BigInt | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1692,16 +1951,16 @@ export class Agenda extends Entity {
   }
 
   set eventTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigInt(value as BigInt));
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get agendaStartTime(): BigInt | null {
     let value = this.get("agendaStartTime");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1709,16 +1968,16 @@ export class Agenda extends Entity {
   }
 
   set agendaStartTime(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("agendaStartTime");
     } else {
-      this.set("agendaStartTime", Value.fromBigInt(value as BigInt));
+      this.set("agendaStartTime", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get agendaEndTime(): BigInt | null {
     let value = this.get("agendaEndTime");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1726,16 +1985,16 @@ export class Agenda extends Entity {
   }
 
   set agendaEndTime(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("agendaEndTime");
     } else {
-      this.set("agendaEndTime", Value.fromBigInt(value as BigInt));
+      this.set("agendaEndTime", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get agendaName(): string | null {
     let value = this.get("agendaName");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1743,16 +2002,16 @@ export class Agenda extends Entity {
   }
 
   set agendaName(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("agendaName");
     } else {
-      this.set("agendaName", Value.fromString(value as string));
+      this.set("agendaName", Value.fromString(<string>value));
     }
   }
 
   get agendaStatus(): string | null {
     let value = this.get("agendaStatus");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1760,16 +2019,16 @@ export class Agenda extends Entity {
   }
 
   set agendaStatus(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("agendaStatus");
     } else {
-      this.set("agendaStatus", Value.fromString(value as string));
+      this.set("agendaStatus", Value.fromString(<string>value));
     }
   }
 
   get guestName(): Array<string> | null {
     let value = this.get("guestName");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toStringArray();
@@ -1777,16 +2036,16 @@ export class Agenda extends Entity {
   }
 
   set guestName(value: Array<string> | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("guestName");
     } else {
-      this.set("guestName", Value.fromStringArray(value as Array<string>));
+      this.set("guestName", Value.fromStringArray(<Array<string>>value));
     }
   }
 
   get guestAddress(): Array<string> | null {
     let value = this.get("guestAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toStringArray();
@@ -1794,16 +2053,20 @@ export class Agenda extends Entity {
   }
 
   set guestAddress(value: Array<string> | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("guestAddress");
     } else {
-      this.set("guestAddress", Value.fromStringArray(value as Array<string>));
+      this.set("guestAddress", Value.fromStringArray(<Array<string>>value));
     }
   }
 
   get initiateStatus(): i32 {
     let value = this.get("initiateStatus");
-    return value.toI32();
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
   }
 
   set initiateStatus(value: i32) {
@@ -1812,7 +2075,11 @@ export class Agenda extends Entity {
 
   get isAgendaDeleted(): boolean {
     let value = this.get("isAgendaDeleted");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isAgendaDeleted(value: boolean) {
@@ -1828,22 +2095,31 @@ export class History extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save History entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save History entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("History", id.toString(), this);
+    assert(id != null, "Cannot save History entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type History must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("History", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): History | null {
+    return changetype<History | null>(store.get_in_block("History", id));
   }
 
   static load(id: string): History | null {
-    return store.get("History", id) as History | null;
+    return changetype<History | null>(store.get("History", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -1852,7 +2128,7 @@ export class History extends Entity {
 
   get eventTokenId(): BigInt | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1860,16 +2136,16 @@ export class History extends Entity {
   }
 
   set eventTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigInt(value as BigInt));
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get data(): Array<string> | null {
     let value = this.get("data");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toStringArray();
@@ -1877,16 +2153,16 @@ export class History extends Entity {
   }
 
   set data(value: Array<string> | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("data");
     } else {
-      this.set("data", Value.fromStringArray(value as Array<string>));
+      this.set("data", Value.fromStringArray(<Array<string>>value));
     }
   }
 
   get userAddress(): Bytes | null {
     let value = this.get("userAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -1894,10 +2170,10 @@ export class History extends Entity {
   }
 
   set userAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("userAddress");
     } else {
-      this.set("userAddress", Value.fromBytes(value as Bytes));
+      this.set("userAddress", Value.fromBytes(<Bytes>value));
     }
   }
 }
@@ -1910,22 +2186,31 @@ export class Join extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Join entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Join entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Join", id.toString(), this);
+    assert(id != null, "Cannot save Join entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Join must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Join", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): Join | null {
+    return changetype<Join | null>(store.get_in_block("Join", id));
   }
 
   static load(id: string): Join | null {
-    return store.get("Join", id) as Join | null;
+    return changetype<Join | null>(store.get("Join", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -1934,7 +2219,7 @@ export class Join extends Entity {
 
   get eventTokenId(): BigInt | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1942,16 +2227,16 @@ export class Join extends Entity {
   }
 
   set eventTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigInt(value as BigInt));
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get userAddress(): Bytes | null {
     let value = this.get("userAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -1959,16 +2244,16 @@ export class Join extends Entity {
   }
 
   set userAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("userAddress");
     } else {
-      this.set("userAddress", Value.fromBytes(value as Bytes));
+      this.set("userAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get joinTime(): BigInt | null {
     let value = this.get("joinTime");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1976,16 +2261,16 @@ export class Join extends Entity {
   }
 
   set joinTime(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("joinTime");
     } else {
-      this.set("joinTime", Value.fromBigInt(value as BigInt));
+      this.set("joinTime", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get ticketId(): BigInt | null {
     let value = this.get("ticketId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1993,16 +2278,20 @@ export class Join extends Entity {
   }
 
   set ticketId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("ticketId");
     } else {
-      this.set("ticketId", Value.fromBigInt(value as BigInt));
+      this.set("ticketId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get isJoined(): boolean {
     let value = this.get("isJoined");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isJoined(value: boolean) {
@@ -2018,22 +2307,31 @@ export class Exit extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Exit entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Exit entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Exit", id.toString(), this);
+    assert(id != null, "Cannot save Exit entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Exit must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Exit", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): Exit | null {
+    return changetype<Exit | null>(store.get_in_block("Exit", id));
   }
 
   static load(id: string): Exit | null {
-    return store.get("Exit", id) as Exit | null;
+    return changetype<Exit | null>(store.get("Exit", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -2042,7 +2340,7 @@ export class Exit extends Entity {
 
   get eventTokenId(): BigInt | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2050,16 +2348,16 @@ export class Exit extends Entity {
   }
 
   set eventTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigInt(value as BigInt));
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get userAddress(): Bytes | null {
     let value = this.get("userAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2067,16 +2365,16 @@ export class Exit extends Entity {
   }
 
   set userAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("userAddress");
     } else {
-      this.set("userAddress", Value.fromBytes(value as Bytes));
+      this.set("userAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get leavingTime(): BigInt | null {
     let value = this.get("leavingTime");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2084,16 +2382,16 @@ export class Exit extends Entity {
   }
 
   set leavingTime(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("leavingTime");
     } else {
-      this.set("leavingTime", Value.fromBigInt(value as BigInt));
+      this.set("leavingTime", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get ticketId(): BigInt | null {
     let value = this.get("ticketId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2101,10 +2399,10 @@ export class Exit extends Entity {
   }
 
   set ticketId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("ticketId");
     } else {
-      this.set("ticketId", Value.fromBigInt(value as BigInt));
+      this.set("ticketId", Value.fromBigInt(<BigInt>value));
     }
   }
 }
@@ -2117,22 +2415,33 @@ export class TicketBought extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save TicketBought entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save TicketBought entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
+    assert(id != null, "Cannot save TicketBought entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type TicketBought must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("TicketBought", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): TicketBought | null {
+    return changetype<TicketBought | null>(
+      store.get_in_block("TicketBought", id)
     );
-    store.set("TicketBought", id.toString(), this);
   }
 
   static load(id: string): TicketBought | null {
-    return store.get("TicketBought", id) as TicketBought | null;
+    return changetype<TicketBought | null>(store.get("TicketBought", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -2141,7 +2450,7 @@ export class TicketBought extends Entity {
 
   get eventTokenId(): BigInt | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2149,16 +2458,16 @@ export class TicketBought extends Entity {
   }
 
   set eventTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigInt(value as BigInt));
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get ticketId(): BigInt | null {
     let value = this.get("ticketId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2166,16 +2475,16 @@ export class TicketBought extends Entity {
   }
 
   set ticketId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("ticketId");
     } else {
-      this.set("ticketId", Value.fromBigInt(value as BigInt));
+      this.set("ticketId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get userAddress(): Bytes | null {
     let value = this.get("userAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2183,16 +2492,16 @@ export class TicketBought extends Entity {
   }
 
   set userAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("userAddress");
     } else {
-      this.set("userAddress", Value.fromBytes(value as Bytes));
+      this.set("userAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get tokenAddress(): Bytes | null {
     let value = this.get("tokenAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2200,16 +2509,16 @@ export class TicketBought extends Entity {
   }
 
   set tokenAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenAddress");
     } else {
-      this.set("tokenAddress", Value.fromBytes(value as Bytes));
+      this.set("tokenAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get ticketFeeAmount(): BigInt | null {
     let value = this.get("ticketFeeAmount");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2217,10 +2526,10 @@ export class TicketBought extends Entity {
   }
 
   set ticketFeeAmount(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("ticketFeeAmount");
     } else {
-      this.set("ticketFeeAmount", Value.fromBigInt(value as BigInt));
+      this.set("ticketFeeAmount", Value.fromBigInt(<BigInt>value));
     }
   }
 }
@@ -2233,22 +2542,33 @@ export class TicketBalance extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save TicketBalance entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save TicketBalance entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
+    assert(id != null, "Cannot save TicketBalance entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type TicketBalance must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("TicketBalance", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): TicketBalance | null {
+    return changetype<TicketBalance | null>(
+      store.get_in_block("TicketBalance", id)
     );
-    store.set("TicketBalance", id.toString(), this);
   }
 
   static load(id: string): TicketBalance | null {
-    return store.get("TicketBalance", id) as TicketBalance | null;
+    return changetype<TicketBalance | null>(store.get("TicketBalance", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -2257,7 +2577,7 @@ export class TicketBalance extends Entity {
 
   get ticketId(): BigInt | null {
     let value = this.get("ticketId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2265,16 +2585,16 @@ export class TicketBalance extends Entity {
   }
 
   set ticketId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("ticketId");
     } else {
-      this.set("ticketId", Value.fromBigInt(value as BigInt));
+      this.set("ticketId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get ownerAddress(): Bytes | null {
     let value = this.get("ownerAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2282,16 +2602,16 @@ export class TicketBalance extends Entity {
   }
 
   set ownerAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("ownerAddress");
     } else {
-      this.set("ownerAddress", Value.fromBytes(value as Bytes));
+      this.set("ownerAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get from(): Bytes | null {
     let value = this.get("from");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2299,16 +2619,16 @@ export class TicketBalance extends Entity {
   }
 
   set from(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("from");
     } else {
-      this.set("from", Value.fromBytes(value as Bytes));
+      this.set("from", Value.fromBytes(<Bytes>value));
     }
   }
 
   get ticketNFTAddress(): Bytes | null {
     let value = this.get("ticketNFTAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2316,16 +2636,20 @@ export class TicketBalance extends Entity {
   }
 
   set ticketNFTAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("ticketNFTAddress");
     } else {
-      this.set("ticketNFTAddress", Value.fromBytes(value as Bytes));
+      this.set("ticketNFTAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get isUsed(): boolean {
     let value = this.get("isUsed");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isUsed(value: boolean) {
@@ -2334,7 +2658,7 @@ export class TicketBalance extends Entity {
 
   get balance(): BigInt | null {
     let value = this.get("balance");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2342,16 +2666,16 @@ export class TicketBalance extends Entity {
   }
 
   set balance(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("balance");
     } else {
-      this.set("balance", Value.fromBigInt(value as BigInt));
+      this.set("balance", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get tokenAddress(): Bytes | null {
     let value = this.get("tokenAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2359,16 +2683,16 @@ export class TicketBalance extends Entity {
   }
 
   set tokenAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenAddress");
     } else {
-      this.set("tokenAddress", Value.fromBytes(value as Bytes));
+      this.set("tokenAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get ticketFeeAmount(): BigInt | null {
     let value = this.get("ticketFeeAmount");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2376,16 +2700,16 @@ export class TicketBalance extends Entity {
   }
 
   set ticketFeeAmount(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("ticketFeeAmount");
     } else {
-      this.set("ticketFeeAmount", Value.fromBigInt(value as BigInt));
+      this.set("ticketFeeAmount", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get eventTokenId(): BigInt | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2393,10 +2717,10 @@ export class TicketBalance extends Entity {
   }
 
   set eventTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigInt(value as BigInt));
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
     }
   }
 }
@@ -2409,22 +2733,33 @@ export class TicketRefund extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save TicketRefund entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save TicketRefund entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
+    assert(id != null, "Cannot save TicketRefund entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type TicketRefund must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("TicketRefund", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): TicketRefund | null {
+    return changetype<TicketRefund | null>(
+      store.get_in_block("TicketRefund", id)
     );
-    store.set("TicketRefund", id.toString(), this);
   }
 
   static load(id: string): TicketRefund | null {
-    return store.get("TicketRefund", id) as TicketRefund | null;
+    return changetype<TicketRefund | null>(store.get("TicketRefund", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -2433,7 +2768,7 @@ export class TicketRefund extends Entity {
 
   get eventTokenId(): BigInt | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2441,16 +2776,16 @@ export class TicketRefund extends Entity {
   }
 
   set eventTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigInt(value as BigInt));
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get ticketId(): BigInt | null {
     let value = this.get("ticketId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2458,16 +2793,16 @@ export class TicketRefund extends Entity {
   }
 
   set ticketId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("ticketId");
     } else {
-      this.set("ticketId", Value.fromBigInt(value as BigInt));
+      this.set("ticketId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get userAddress(): Bytes | null {
     let value = this.get("userAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2475,16 +2810,20 @@ export class TicketRefund extends Entity {
   }
 
   set userAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("userAddress");
     } else {
-      this.set("userAddress", Value.fromBytes(value as Bytes));
+      this.set("userAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get refundStatus(): boolean {
     let value = this.get("refundStatus");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set refundStatus(value: boolean) {
@@ -2500,22 +2839,33 @@ export class VenueRefund extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save VenueRefund entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save VenueRefund entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
+    assert(id != null, "Cannot save VenueRefund entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type VenueRefund must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("VenueRefund", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): VenueRefund | null {
+    return changetype<VenueRefund | null>(
+      store.get_in_block("VenueRefund", id)
     );
-    store.set("VenueRefund", id.toString(), this);
   }
 
   static load(id: string): VenueRefund | null {
-    return store.get("VenueRefund", id) as VenueRefund | null;
+    return changetype<VenueRefund | null>(store.get("VenueRefund", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -2524,7 +2874,7 @@ export class VenueRefund extends Entity {
 
   get eventTokenId(): BigInt | null {
     let value = this.get("eventTokenId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2532,16 +2882,16 @@ export class VenueRefund extends Entity {
   }
 
   set eventTokenId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventTokenId");
     } else {
-      this.set("eventTokenId", Value.fromBigInt(value as BigInt));
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get eventOrganiser(): Bytes | null {
     let value = this.get("eventOrganiser");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2549,16 +2899,20 @@ export class VenueRefund extends Entity {
   }
 
   set eventOrganiser(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventOrganiser");
     } else {
-      this.set("eventOrganiser", Value.fromBytes(value as Bytes));
+      this.set("eventOrganiser", Value.fromBytes(<Bytes>value));
     }
   }
 
   get refundStatus(): boolean {
     let value = this.get("refundStatus");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set refundStatus(value: boolean) {
@@ -2574,22 +2928,31 @@ export class EventId extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save EventId entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save EventId entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("EventId", id.toString(), this);
+    assert(id != null, "Cannot save EventId entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type EventId must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("EventId", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): EventId | null {
+    return changetype<EventId | null>(store.get_in_block("EventId", id));
   }
 
   static load(id: string): EventId | null {
-    return store.get("EventId", id) as EventId | null;
+    return changetype<EventId | null>(store.get("EventId", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -2598,7 +2961,7 @@ export class EventId extends Entity {
 
   get eventId(): BigInt | null {
     let value = this.get("eventId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2606,16 +2969,16 @@ export class EventId extends Entity {
   }
 
   set eventId(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("eventId");
     } else {
-      this.set("eventId", Value.fromBigInt(value as BigInt));
+      this.set("eventId", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get ticketNFTAddress(): Bytes | null {
     let value = this.get("ticketNFTAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2623,10 +2986,10 @@ export class EventId extends Entity {
   }
 
   set ticketNFTAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("ticketNFTAddress");
     } else {
-      this.set("ticketNFTAddress", Value.fromBytes(value as Bytes));
+      this.set("ticketNFTAddress", Value.fromBytes(<Bytes>value));
     }
   }
 }
@@ -2639,22 +3002,33 @@ export class Erc721UserToken extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Erc721UserToken entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Erc721UserToken entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
+    assert(id != null, "Cannot save Erc721UserToken entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Erc721UserToken must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Erc721UserToken", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): Erc721UserToken | null {
+    return changetype<Erc721UserToken | null>(
+      store.get_in_block("Erc721UserToken", id)
     );
-    store.set("Erc721UserToken", id.toString(), this);
   }
 
   static load(id: string): Erc721UserToken | null {
-    return store.get("Erc721UserToken", id) as Erc721UserToken | null;
+    return changetype<Erc721UserToken | null>(store.get("Erc721UserToken", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -2663,7 +3037,7 @@ export class Erc721UserToken extends Entity {
 
   get owner(): Bytes | null {
     let value = this.get("owner");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2671,16 +3045,16 @@ export class Erc721UserToken extends Entity {
   }
 
   set owner(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("owner");
     } else {
-      this.set("owner", Value.fromBytes(value as Bytes));
+      this.set("owner", Value.fromBytes(<Bytes>value));
     }
   }
 
   get from(): Bytes | null {
     let value = this.get("from");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2688,16 +3062,16 @@ export class Erc721UserToken extends Entity {
   }
 
   set from(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("from");
     } else {
-      this.set("from", Value.fromBytes(value as Bytes));
+      this.set("from", Value.fromBytes(<Bytes>value));
     }
   }
 
   get tokenID(): BigInt | null {
     let value = this.get("tokenID");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2705,16 +3079,16 @@ export class Erc721UserToken extends Entity {
   }
 
   set tokenID(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenID");
     } else {
-      this.set("tokenID", Value.fromBigInt(value as BigInt));
+      this.set("tokenID", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get nftContractAddress(): Bytes | null {
     let value = this.get("nftContractAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2722,16 +3096,16 @@ export class Erc721UserToken extends Entity {
   }
 
   set nftContractAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("nftContractAddress");
     } else {
-      this.set("nftContractAddress", Value.fromBytes(value as Bytes));
+      this.set("nftContractAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get balance(): BigInt | null {
     let value = this.get("balance");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2739,16 +3113,20 @@ export class Erc721UserToken extends Entity {
   }
 
   set balance(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("balance");
     } else {
-      this.set("balance", Value.fromBigInt(value as BigInt));
+      this.set("balance", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get isUsed(): boolean {
     let value = this.get("isUsed");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isUsed(value: boolean) {
@@ -2764,22 +3142,33 @@ export class isTokenUsed extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save isTokenUsed entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save isTokenUsed entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
+    assert(id != null, "Cannot save isTokenUsed entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type isTokenUsed must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("isTokenUsed", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): isTokenUsed | null {
+    return changetype<isTokenUsed | null>(
+      store.get_in_block("isTokenUsed", id)
     );
-    store.set("isTokenUsed", id.toString(), this);
   }
 
   static load(id: string): isTokenUsed | null {
-    return store.get("isTokenUsed", id) as isTokenUsed | null;
+    return changetype<isTokenUsed | null>(store.get("isTokenUsed", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -2788,7 +3177,7 @@ export class isTokenUsed extends Entity {
 
   get nftContractAddress(): Bytes | null {
     let value = this.get("nftContractAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -2796,16 +3185,16 @@ export class isTokenUsed extends Entity {
   }
 
   set nftContractAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("nftContractAddress");
     } else {
-      this.set("nftContractAddress", Value.fromBytes(value as Bytes));
+      this.set("nftContractAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get tokenID(): BigInt | null {
     let value = this.get("tokenID");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2813,19 +3202,721 @@ export class isTokenUsed extends Entity {
   }
 
   set tokenID(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenID");
     } else {
-      this.set("tokenID", Value.fromBigInt(value as BigInt));
+      this.set("tokenID", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get isUsed(): boolean {
     let value = this.get("isUsed");
-    return value.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isUsed(value: boolean) {
     this.set("isUsed", Value.fromBoolean(value));
+  }
+}
+
+export class eventStat extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save eventStat entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type eventStat must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("eventStat", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): eventStat | null {
+    return changetype<eventStat | null>(store.get_in_block("eventStat", id));
+  }
+
+  static load(id: string): eventStat | null {
+    return changetype<eventStat | null>(store.get("eventStat", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get eventTokenId(): BigInt | null {
+    let value = this.get("eventTokenId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set eventTokenId(value: BigInt | null) {
+    if (!value) {
+      this.unset("eventTokenId");
+    } else {
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get eventEndTime(): BigInt | null {
+    let value = this.get("eventEndTime");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set eventEndTime(value: BigInt | null) {
+    if (!value) {
+      this.unset("eventEndTime");
+    } else {
+      this.set("eventEndTime", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get likeCount(): BigInt | null {
+    let value = this.get("likeCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set likeCount(value: BigInt | null) {
+    if (!value) {
+      this.unset("likeCount");
+    } else {
+      this.set("likeCount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get ticketCount(): BigInt | null {
+    let value = this.get("ticketCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set ticketCount(value: BigInt | null) {
+    if (!value) {
+      this.unset("ticketCount");
+    } else {
+      this.set("ticketCount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get joinedCount(): BigInt | null {
+    let value = this.get("joinedCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set joinedCount(value: BigInt | null) {
+    if (!value) {
+      this.unset("joinedCount");
+    } else {
+      this.set("joinedCount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get liveUsersCount(): BigInt | null {
+    let value = this.get("liveUsersCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set liveUsersCount(value: BigInt | null) {
+    if (!value) {
+      this.unset("liveUsersCount");
+    } else {
+      this.set("liveUsersCount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get oneTicketPrice(): BigInt | null {
+    let value = this.get("oneTicketPrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set oneTicketPrice(value: BigInt | null) {
+    if (!value) {
+      this.unset("oneTicketPrice");
+    } else {
+      this.set("oneTicketPrice", Value.fromBigInt(<BigInt>value));
+    }
+  }
+}
+
+export class likeCount extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save likeCount entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type likeCount must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("likeCount", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): likeCount | null {
+    return changetype<likeCount | null>(store.get_in_block("likeCount", id));
+  }
+
+  static load(id: string): likeCount | null {
+    return changetype<likeCount | null>(store.get("likeCount", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get eventTokenId(): BigInt | null {
+    let value = this.get("eventTokenId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set eventTokenId(value: BigInt | null) {
+    if (!value) {
+      this.unset("eventTokenId");
+    } else {
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get likeCounts(): BigInt | null {
+    let value = this.get("likeCounts");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set likeCounts(value: BigInt | null) {
+    if (!value) {
+      this.unset("likeCounts");
+    } else {
+      this.set("likeCounts", Value.fromBigInt(<BigInt>value));
+    }
+  }
+}
+
+export class ticketCount extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save ticketCount entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type ticketCount must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("ticketCount", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): ticketCount | null {
+    return changetype<ticketCount | null>(
+      store.get_in_block("ticketCount", id)
+    );
+  }
+
+  static load(id: string): ticketCount | null {
+    return changetype<ticketCount | null>(store.get("ticketCount", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get eventTokenId(): BigInt | null {
+    let value = this.get("eventTokenId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set eventTokenId(value: BigInt | null) {
+    if (!value) {
+      this.unset("eventTokenId");
+    } else {
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get ticketCount(): BigInt | null {
+    let value = this.get("ticketCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set ticketCount(value: BigInt | null) {
+    if (!value) {
+      this.unset("ticketCount");
+    } else {
+      this.set("ticketCount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+}
+
+export class joinCount extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save joinCount entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type joinCount must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("joinCount", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): joinCount | null {
+    return changetype<joinCount | null>(store.get_in_block("joinCount", id));
+  }
+
+  static load(id: string): joinCount | null {
+    return changetype<joinCount | null>(store.get("joinCount", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get eventTokenId(): BigInt | null {
+    let value = this.get("eventTokenId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set eventTokenId(value: BigInt | null) {
+    if (!value) {
+      this.unset("eventTokenId");
+    } else {
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get joinedCount(): BigInt | null {
+    let value = this.get("joinedCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set joinedCount(value: BigInt | null) {
+    if (!value) {
+      this.unset("joinedCount");
+    } else {
+      this.set("joinedCount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get liveUsersCount(): BigInt | null {
+    let value = this.get("liveUsersCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set liveUsersCount(value: BigInt | null) {
+    if (!value) {
+      this.unset("liveUsersCount");
+    } else {
+      this.set("liveUsersCount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+}
+
+export class eventActivity extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save eventActivity entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type eventActivity must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("eventActivity", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): eventActivity | null {
+    return changetype<eventActivity | null>(
+      store.get_in_block("eventActivity", id)
+    );
+  }
+
+  static load(id: string): eventActivity | null {
+    return changetype<eventActivity | null>(store.get("eventActivity", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get userAddress(): Bytes | null {
+    let value = this.get("userAddress");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set userAddress(value: Bytes | null) {
+    if (!value) {
+      this.unset("userAddress");
+    } else {
+      this.set("userAddress", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get uniqueUserCount(): BigInt | null {
+    let value = this.get("uniqueUserCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set uniqueUserCount(value: BigInt | null) {
+    if (!value) {
+      this.unset("uniqueUserCount");
+    } else {
+      this.set("uniqueUserCount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get liveUsersCount(): BigInt | null {
+    let value = this.get("liveUsersCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set liveUsersCount(value: BigInt | null) {
+    if (!value) {
+      this.unset("liveUsersCount");
+    } else {
+      this.set("liveUsersCount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get eventTokenId(): BigInt | null {
+    let value = this.get("eventTokenId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set eventTokenId(value: BigInt | null) {
+    if (!value) {
+      this.unset("eventTokenId");
+    } else {
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get eventEndTime(): BigInt | null {
+    let value = this.get("eventEndTime");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set eventEndTime(value: BigInt | null) {
+    if (!value) {
+      this.unset("eventEndTime");
+    } else {
+      this.set("eventEndTime", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get joinTime(): BigInt | null {
+    let value = this.get("joinTime");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set joinTime(value: BigInt | null) {
+    if (!value) {
+      this.unset("joinTime");
+    } else {
+      this.set("joinTime", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get exitTime(): BigInt | null {
+    let value = this.get("exitTime");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set exitTime(value: BigInt | null) {
+    if (!value) {
+      this.unset("exitTime");
+    } else {
+      this.set("exitTime", Value.fromBigInt(<BigInt>value));
+    }
+  }
+}
+
+export class uniqueUserExit extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save uniqueUserExit entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type uniqueUserExit must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("uniqueUserExit", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): uniqueUserExit | null {
+    return changetype<uniqueUserExit | null>(
+      store.get_in_block("uniqueUserExit", id)
+    );
+  }
+
+  static load(id: string): uniqueUserExit | null {
+    return changetype<uniqueUserExit | null>(store.get("uniqueUserExit", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get uniqueUserAddress(): Bytes | null {
+    let value = this.get("uniqueUserAddress");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set uniqueUserAddress(value: Bytes | null) {
+    if (!value) {
+      this.unset("uniqueUserAddress");
+    } else {
+      this.set("uniqueUserAddress", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get eventTokenId(): BigInt | null {
+    let value = this.get("eventTokenId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set eventTokenId(value: BigInt | null) {
+    if (!value) {
+      this.unset("eventTokenId");
+    } else {
+      this.set("eventTokenId", Value.fromBigInt(<BigInt>value));
+    }
+  }
+}
+
+export class ticketCommission extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save ticketCommission entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type ticketCommission must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("ticketCommission", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): ticketCommission | null {
+    return changetype<ticketCommission | null>(
+      store.get_in_block("ticketCommission", id)
+    );
+  }
+
+  static load(id: string): ticketCommission | null {
+    return changetype<ticketCommission | null>(
+      store.get("ticketCommission", id)
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get ticketCommissionPercent(): BigInt | null {
+    let value = this.get("ticketCommissionPercent");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set ticketCommissionPercent(value: BigInt | null) {
+    if (!value) {
+      this.unset("ticketCommissionPercent");
+    } else {
+      this.set("ticketCommissionPercent", Value.fromBigInt(<BigInt>value));
+    }
   }
 }

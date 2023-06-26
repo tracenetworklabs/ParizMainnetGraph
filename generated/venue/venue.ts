@@ -318,6 +318,54 @@ export class VenueFeesUpdated__Params {
   }
 }
 
+export class VenueOwnerUpdated extends ethereum.Event {
+  get params(): VenueOwnerUpdated__Params {
+    return new VenueOwnerUpdated__Params(this);
+  }
+}
+
+export class VenueOwnerUpdated__Params {
+  _event: VenueOwnerUpdated;
+
+  constructor(event: VenueOwnerUpdated) {
+    this._event = event;
+  }
+
+  get tokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get owner(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class VenueVersionUpdated extends ethereum.Event {
+  get params(): VenueVersionUpdated__Params {
+    return new VenueVersionUpdated__Params(this);
+  }
+}
+
+export class VenueVersionUpdated__Params {
+  _event: VenueVersionUpdated;
+
+  constructor(event: VenueVersionUpdated) {
+    this._event = event;
+  }
+
+  get eventTokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get venueTokenId(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get venueVersion(): string {
+    return this._event.parameters[2].value.toString();
+  }
+}
+
 export class venue__getInfoResult {
   value0: string;
   value1: string;
@@ -360,6 +408,63 @@ export class venue__getInfoResult {
     map.set("value7", ethereum.Value.fromString(this.value7));
     return map;
   }
+
+  getName(): string {
+    return this.value0;
+  }
+
+  getLocation(): string {
+    return this.value1;
+  }
+
+  getCategory(): string {
+    return this.value2;
+  }
+
+  getTokenId(): BigInt {
+    return this.value3;
+  }
+
+  getOwner(): Address {
+    return this.value4;
+  }
+
+  getTotalCapacity(): BigInt {
+    return this.value5;
+  }
+
+  getRentPerBlock(): BigInt {
+    return this.value6;
+  }
+
+  getTokenCID(): string {
+    return this.value7;
+  }
+}
+
+export class venue__refundVenueFeesInternalResult {
+  value0: BigInt;
+  value1: Address;
+
+  constructor(value0: BigInt, value1: Address) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromAddress(this.value1));
+    return map;
+  }
+
+  getValue0(): BigInt {
+    return this.value0;
+  }
+
+  getValue1(): Address {
+    return this.value1;
+  }
 }
 
 export class venue extends ethereum.SmartContract {
@@ -384,6 +489,25 @@ export class venue extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  adminContract(): Address {
+    let result = super.call("adminContract", "adminContract():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_adminContract(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "adminContract",
+      "adminContract():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   balanceOf(owner: Address): BigInt {
@@ -418,6 +542,38 @@ export class venue extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  claimVenueFeesInternal(_venueTokenId: BigInt, _venueOwner: Address): Address {
+    let result = super.call(
+      "claimVenueFeesInternal",
+      "claimVenueFeesInternal(uint256,address):(address)",
+      [
+        ethereum.Value.fromUnsignedBigInt(_venueTokenId),
+        ethereum.Value.fromAddress(_venueOwner)
+      ]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_claimVenueFeesInternal(
+    _venueTokenId: BigInt,
+    _venueOwner: Address
+  ): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "claimVenueFeesInternal",
+      "claimVenueFeesInternal(uint256,address):(address)",
+      [
+        ethereum.Value.fromUnsignedBigInt(_venueTokenId),
+        ethereum.Value.fromAddress(_venueOwner)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   getApproved(tokenId: BigInt): Address {
@@ -720,6 +876,53 @@ export class venue extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  refundVenueFeesInternal(
+    eventTokenId: BigInt,
+    balance: BigInt,
+    eventOrganiser: Address
+  ): venue__refundVenueFeesInternalResult {
+    let result = super.call(
+      "refundVenueFeesInternal",
+      "refundVenueFeesInternal(uint256,uint256,address):(uint256,address)",
+      [
+        ethereum.Value.fromUnsignedBigInt(eventTokenId),
+        ethereum.Value.fromUnsignedBigInt(balance),
+        ethereum.Value.fromAddress(eventOrganiser)
+      ]
+    );
+
+    return new venue__refundVenueFeesInternalResult(
+      result[0].toBigInt(),
+      result[1].toAddress()
+    );
+  }
+
+  try_refundVenueFeesInternal(
+    eventTokenId: BigInt,
+    balance: BigInt,
+    eventOrganiser: Address
+  ): ethereum.CallResult<venue__refundVenueFeesInternalResult> {
+    let result = super.tryCall(
+      "refundVenueFeesInternal",
+      "refundVenueFeesInternal(uint256,uint256,address):(uint256,address)",
+      [
+        ethereum.Value.fromUnsignedBigInt(eventTokenId),
+        ethereum.Value.fromUnsignedBigInt(balance),
+        ethereum.Value.fromAddress(eventOrganiser)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new venue__refundVenueFeesInternalResult(
+        value[0].toBigInt(),
+        value[1].toAddress()
+      )
+    );
+  }
+
   supportsInterface(interfaceId: Bytes): boolean {
     let result = super.call(
       "supportsInterface",
@@ -791,6 +994,27 @@ export class venue extends ethereum.SmartContract {
     let result = super.tryCall("tokenURI", "tokenURI(uint256):(string)", [
       ethereum.Value.fromUnsignedBigInt(tokenId)
     ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  venueVersion(param0: BigInt): string {
+    let result = super.call("venueVersion", "venueVersion(uint256):(string)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
+    ]);
+
+    return result[0].toString();
+  }
+
+  try_venueVersion(param0: BigInt): ethereum.CallResult<string> {
+    let result = super.tryCall(
+      "venueVersion",
+      "venueVersion(uint256):(string)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -1129,6 +1353,36 @@ export class TransferOwnershipCall__Outputs {
   }
 }
 
+export class UpdateAdminContractCall extends ethereum.Call {
+  get inputs(): UpdateAdminContractCall__Inputs {
+    return new UpdateAdminContractCall__Inputs(this);
+  }
+
+  get outputs(): UpdateAdminContractCall__Outputs {
+    return new UpdateAdminContractCall__Outputs(this);
+  }
+}
+
+export class UpdateAdminContractCall__Inputs {
+  _call: UpdateAdminContractCall;
+
+  constructor(call: UpdateAdminContractCall) {
+    this._call = call;
+  }
+
+  get _adminContract(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class UpdateAdminContractCall__Outputs {
+  _call: UpdateAdminContractCall;
+
+  constructor(call: UpdateAdminContractCall) {
+    this._call = call;
+  }
+}
+
 export class UpdateVenueFeesCall extends ethereum.Call {
   get inputs(): UpdateVenueFeesCall__Inputs {
     return new UpdateVenueFeesCall__Inputs(this);
@@ -1159,6 +1413,74 @@ export class UpdateVenueFeesCall__Outputs {
   _call: UpdateVenueFeesCall;
 
   constructor(call: UpdateVenueFeesCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateVenueOwnerCall extends ethereum.Call {
+  get inputs(): UpdateVenueOwnerCall__Inputs {
+    return new UpdateVenueOwnerCall__Inputs(this);
+  }
+
+  get outputs(): UpdateVenueOwnerCall__Outputs {
+    return new UpdateVenueOwnerCall__Outputs(this);
+  }
+}
+
+export class UpdateVenueOwnerCall__Inputs {
+  _call: UpdateVenueOwnerCall;
+
+  constructor(call: UpdateVenueOwnerCall) {
+    this._call = call;
+  }
+
+  get venueTokenId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get owner(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class UpdateVenueOwnerCall__Outputs {
+  _call: UpdateVenueOwnerCall;
+
+  constructor(call: UpdateVenueOwnerCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateVenueVersionCall extends ethereum.Call {
+  get inputs(): UpdateVenueVersionCall__Inputs {
+    return new UpdateVenueVersionCall__Inputs(this);
+  }
+
+  get outputs(): UpdateVenueVersionCall__Outputs {
+    return new UpdateVenueVersionCall__Outputs(this);
+  }
+}
+
+export class UpdateVenueVersionCall__Inputs {
+  _call: UpdateVenueVersionCall;
+
+  constructor(call: UpdateVenueVersionCall) {
+    this._call = call;
+  }
+
+  get _eventTokenId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get _venueVersion(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+}
+
+export class UpdateVenueVersionCall__Outputs {
+  _call: UpdateVenueVersionCall;
+
+  constructor(call: UpdateVenueVersionCall) {
     this._call = call;
   }
 }

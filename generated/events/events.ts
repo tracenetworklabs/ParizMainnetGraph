@@ -482,6 +482,18 @@ export class events__calculateRentResult {
     map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     return map;
   }
+
+  get_estimatedCost(): BigInt {
+    return this.value0;
+  }
+
+  get_platformFees(): BigInt {
+    return this.value1;
+  }
+
+  get_venueRentalCommissionFees(): BigInt {
+    return this.value2;
+  }
 }
 
 export class events__getEventDetailsResult {
@@ -517,6 +529,30 @@ export class events__getEventDetailsResult {
     map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
     map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
     return map;
+  }
+
+  getStartTime(): BigInt {
+    return this.value0;
+  }
+
+  getEndTime(): BigInt {
+    return this.value1;
+  }
+
+  getEventOrganiser(): Address {
+    return this.value2;
+  }
+
+  getPayNow(): boolean {
+    return this.value3;
+  }
+
+  getVenueTokenId(): BigInt {
+    return this.value4;
+  }
+
+  getTicketPrice(): BigInt {
+    return this.value5;
   }
 }
 
@@ -569,6 +605,46 @@ export class events__getInfoResult {
     map.set("value8", ethereum.Value.fromAddress(this.value8));
     map.set("value9", ethereum.Value.fromUnsignedBigInt(this.value9));
     return map;
+  }
+
+  getName(): string {
+    return this.value0;
+  }
+
+  getCategory(): string {
+    return this.value1;
+  }
+
+  getDescription(): string {
+    return this.value2;
+  }
+
+  getTokenId(): BigInt {
+    return this.value3;
+  }
+
+  getStartTime(): BigInt {
+    return this.value4;
+  }
+
+  getEndTime(): BigInt {
+    return this.value5;
+  }
+
+  getVenueTokenId(): BigInt {
+    return this.value6;
+  }
+
+  getPayNow(): boolean {
+    return this.value7;
+  }
+
+  getEventOrganiser(): Address {
+    return this.value8;
+  }
+
+  getTicketPrice(): BigInt {
+    return this.value9;
   }
 }
 
@@ -1400,6 +1476,18 @@ export class AddCall__Inputs {
   get payNow(): boolean {
     return this._call.inputValues[7].value.toBoolean();
   }
+
+  get tokenAddress(): Array<Address> {
+    return this._call.inputValues[8].value.toAddressArray();
+  }
+
+  get tokenType(): Array<string> {
+    return this._call.inputValues[9].value.toStringArray();
+  }
+
+  get freePassStatus(): Array<BigInt> {
+    return this._call.inputValues[10].value.toBigIntArray();
+  }
 }
 
 export class AddCall__Outputs {
@@ -1595,6 +1683,10 @@ export class JoinCall__Inputs {
 
   get ticketId(): Array<BigInt> {
     return this._call.inputValues[3].value.toBigIntArray();
+  }
+
+  get joinTime(): Array<BigInt> {
+    return this._call.inputValues[4].value.toBigIntArray();
   }
 }
 
@@ -1910,6 +2002,22 @@ export class UpdateEventCall__Inputs {
   get time(): Array<BigInt> {
     return this._call.inputValues[2].value.toBigIntArray();
   }
+
+  get tokenAddress(): Array<Address> {
+    return this._call.inputValues[3].value.toAddressArray();
+  }
+
+  get status(): Array<boolean> {
+    return this._call.inputValues[4].value.toBooleanArray();
+  }
+
+  get tokenType(): Array<string> {
+    return this._call.inputValues[5].value.toStringArray();
+  }
+
+  get freePassStatus(): Array<BigInt> {
+    return this._call.inputValues[6].value.toBigIntArray();
+  }
 }
 
 export class UpdateEventCall__Outputs {
@@ -1954,6 +2062,52 @@ export class UpdateFavouriteCall__Outputs {
   _call: UpdateFavouriteCall;
 
   constructor(call: UpdateFavouriteCall) {
+    this._call = call;
+  }
+}
+
+export class WhitelistTokenCall extends ethereum.Call {
+  get inputs(): WhitelistTokenCall__Inputs {
+    return new WhitelistTokenCall__Inputs(this);
+  }
+
+  get outputs(): WhitelistTokenCall__Outputs {
+    return new WhitelistTokenCall__Outputs(this);
+  }
+}
+
+export class WhitelistTokenCall__Inputs {
+  _call: WhitelistTokenCall;
+
+  constructor(call: WhitelistTokenCall) {
+    this._call = call;
+  }
+
+  get tokenId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get tokenAddress(): Array<Address> {
+    return this._call.inputValues[1].value.toAddressArray();
+  }
+
+  get status(): Array<boolean> {
+    return this._call.inputValues[2].value.toBooleanArray();
+  }
+
+  get tokenType(): Array<string> {
+    return this._call.inputValues[3].value.toStringArray();
+  }
+
+  get freePassStatus(): Array<BigInt> {
+    return this._call.inputValues[4].value.toBigIntArray();
+  }
+}
+
+export class WhitelistTokenCall__Outputs {
+  _call: WhitelistTokenCall;
+
+  constructor(call: WhitelistTokenCall) {
     this._call = call;
   }
 }

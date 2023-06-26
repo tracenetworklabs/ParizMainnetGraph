@@ -381,6 +381,30 @@ export class manageEvent__getAgendaInfoResult {
     map.set("value5", ethereum.Value.fromBoolean(this.value5));
     return map;
   }
+
+  getAgendaId(): BigInt {
+    return this.value0;
+  }
+
+  getAgendaStartTime(): BigInt {
+    return this.value1;
+  }
+
+  getAgendaEndTime(): BigInt {
+    return this.value2;
+  }
+
+  getAgendaName(): string {
+    return this.value3;
+  }
+
+  getInitiateStatus(): i32 {
+    return this.value4;
+  }
+
+  getIsAgendaDeleted(): boolean {
+    return this.value5;
+  }
 }
 
 export class manageEvent extends ethereum.SmartContract {
@@ -1297,6 +1321,10 @@ export class UserExitEventCall__Inputs {
 
   get ticketId(): Array<BigInt> {
     return this._call.inputValues[3].value.toBigIntArray();
+  }
+
+  get exitTime(): Array<BigInt> {
+    return this._call.inputValues[4].value.toBigIntArray();
   }
 }
 

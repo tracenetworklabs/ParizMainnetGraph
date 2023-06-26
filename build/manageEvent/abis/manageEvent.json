@@ -934,6 +934,11 @@
         "internalType": "uint256[]",
         "name": "ticketId",
         "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "exitTime",
+        "type": "uint256[]"
       }
     ],
     "name": "userExitEvent",

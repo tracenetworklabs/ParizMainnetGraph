@@ -222,6 +222,52 @@ export class conversion extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  getSwapFromTrace(tokenA: Address): BigInt {
+    let result = super.call(
+      "getSwapFromTrace",
+      "getSwapFromTrace(address):(uint256)",
+      [ethereum.Value.fromAddress(tokenA)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getSwapFromTrace(tokenA: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getSwapFromTrace",
+      "getSwapFromTrace(address):(uint256)",
+      [ethereum.Value.fromAddress(tokenA)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getSwapFromUSD(tokenA: Address): BigInt {
+    let result = super.call(
+      "getSwapFromUSD",
+      "getSwapFromUSD(address):(uint256)",
+      [ethereum.Value.fromAddress(tokenA)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getSwapFromUSD(tokenA: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getSwapFromUSD",
+      "getSwapFromUSD(address):(uint256)",
+      [ethereum.Value.fromAddress(tokenA)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   getSwapPrice(tokenA: Address, tokenB: Address): BigInt {
     let result = super.call(
       "getSwapPrice",
@@ -271,6 +317,29 @@ export class conversion extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  getTokenPrice(targetToken: Address): BigInt {
+    let result = super.call(
+      "getTokenPrice",
+      "getTokenPrice(address):(uint256)",
+      [ethereum.Value.fromAddress(targetToken)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getTokenPrice(targetToken: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getTokenPrice",
+      "getTokenPrice(address):(uint256)",
+      [ethereum.Value.fromAddress(targetToken)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   owner(): Address {
     let result = super.call("owner", "owner():(address)", []);
 
@@ -311,6 +380,29 @@ export class conversion extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
+
+  tokenCompatibility(): Address {
+    let result = super.call(
+      "tokenCompatibility",
+      "tokenCompatibility():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_tokenCompatibility(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "tokenCompatibility",
+      "tokenCompatibility():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
 }
 
 export class AddTokenCall extends ethereum.Call {
@@ -343,6 +435,36 @@ export class AddTokenCall__Outputs {
   _call: AddTokenCall;
 
   constructor(call: AddTokenCall) {
+    this._call = call;
+  }
+}
+
+export class AddTokenCompatibilityContractCall extends ethereum.Call {
+  get inputs(): AddTokenCompatibilityContractCall__Inputs {
+    return new AddTokenCompatibilityContractCall__Inputs(this);
+  }
+
+  get outputs(): AddTokenCompatibilityContractCall__Outputs {
+    return new AddTokenCompatibilityContractCall__Outputs(this);
+  }
+}
+
+export class AddTokenCompatibilityContractCall__Inputs {
+  _call: AddTokenCompatibilityContractCall;
+
+  constructor(call: AddTokenCompatibilityContractCall) {
+    this._call = call;
+  }
+
+  get _tokenCompatibility(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class AddTokenCompatibilityContractCall__Outputs {
+  _call: AddTokenCompatibilityContractCall;
+
+  constructor(call: AddTokenCompatibilityContractCall) {
     this._call = call;
   }
 }

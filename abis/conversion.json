@@ -122,6 +122,19 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_tokenCompatibility",
+        "type": "address"
+      }
+    ],
+    "name": "addTokenCompatibilityContract",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "_Trace",
         "type": "address"
       },
@@ -242,6 +255,44 @@
         "internalType": "address",
         "name": "tokenA",
         "type": "address"
+      }
+    ],
+    "name": "getSwapFromTrace",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "tokenA",
+        "type": "address"
+      }
+    ],
+    "name": "getSwapFromUSD",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "tokenA",
+        "type": "address"
       },
       {
         "internalType": "address",
@@ -273,6 +324,25 @@
       {
         "internalType": "uint256",
         "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "targetToken",
+        "type": "address"
+      }
+    ],
+    "name": "getTokenPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_price",
         "type": "uint256"
       }
     ],
@@ -313,6 +383,19 @@
       }
     ],
     "name": "priceFeed",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "tokenCompatibility",
     "outputs": [
       {
         "internalType": "address",

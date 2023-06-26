@@ -61,6 +61,12 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "uint256",
+        "name": "eventTokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "tokenAddress",
         "type": "address"
@@ -298,6 +304,19 @@
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "IID_IERC721",
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -371,7 +390,50 @@
         "type": "address"
       }
     ],
+    "name": "erc20TokenAddressEvent",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "name": "erc721TokenAddress",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "erc721TokenAddressMaster",
     "outputs": [
       {
         "internalType": "bool",
@@ -429,6 +491,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getEventCallContract",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -520,6 +595,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTicketControllerContract",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -622,6 +710,25 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "nftAddress",
+        "type": "address"
+      }
+    ],
+    "name": "isERC721",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "tokenAddress",
         "type": "address"
       }
@@ -644,6 +751,25 @@
         "name": "eventTokenId",
         "type": "uint256"
       },
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "isErc20TokenWhitelistedEvent",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
         "internalType": "address",
         "name": "tokenAddress",
@@ -674,7 +800,50 @@
         "type": "address"
       }
     ],
+    "name": "isErc721TokenFreePassEvent",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      }
+    ],
     "name": "isErc721TokenWhitelisted",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "eventTokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "isErc721TokenWhitelistedEvent",
     "outputs": [
       {
         "internalType": "bool",
@@ -815,6 +984,25 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "tokenFreePassStatusMaster",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "newOwner",
         "type": "address"
       }
@@ -872,6 +1060,19 @@
       }
     ],
     "name": "updateDeviation",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_eventCallContract",
+        "type": "address"
+      }
+    ],
+    "name": "updateEventCallContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -971,6 +1172,19 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_ticketControllerContract",
+        "type": "address"
+      }
+    ],
+    "name": "updateTicketControllerContract",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "_ticketMaster",
         "type": "address"
       }
@@ -1040,6 +1254,39 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "eventTokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "tokenAddress",
+        "type": "address[]"
+      },
+      {
+        "internalType": "bool[]",
+        "name": "status",
+        "type": "bool[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "tokenType",
+        "type": "string[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "freePassStatus",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "updateWhitelistToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "",
         "type": "address"
@@ -1077,11 +1324,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "eventTokenId",
-        "type": "uint256"
-      },
-      {
         "internalType": "address",
         "name": "tokenAddress",
         "type": "address"
@@ -1098,6 +1340,34 @@
       }
     ],
     "name": "whitelistErc721TokenAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "eventTokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "tokenAddress",
+        "type": "address[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "tokenType",
+        "type": "string[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "freePassStatus",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "whitelistToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

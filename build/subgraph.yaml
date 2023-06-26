@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.5
 schema:
   file: schema.graphql
 dataSources:
@@ -11,7 +11,7 @@ dataSources:
       startBlock: 40327751
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscripts
       entities:
         - VenueList
@@ -25,6 +25,10 @@ dataSources:
           handler: handleVenueFeesUpdated
         - event: ActiveStatusUpdated(indexed uint256,bool)
           handler: handleActiveStatusUpdated
+        - event: VenueVersionUpdated(uint256,uint256,string)
+          handler: handleVenueVersionUpdated
+        - event: VenueOwnerUpdated(indexed uint256,address)
+          handler: handleVenueOwnerUpdated
       file: venue\venue.wasm
   - kind: ethereum/contract
     name: events
@@ -35,7 +39,7 @@ dataSources:
       startBlock: 40332081
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscripts
       entities:
         - EventList
@@ -50,6 +54,8 @@ dataSources:
           handler: handleFeatured
         - event: Favourite(address,indexed uint256,bool)
           handler: handleFavourite
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
         - event: EventPaid(indexed uint256,bool,uint256)
           handler: handleEventPaid
         - event: EventUpdated(indexed uint256,string,uint256,uint256,uint256)
@@ -68,7 +74,7 @@ dataSources:
       startBlock: 40331360
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscripts
       entities:
         - EventList
@@ -78,11 +84,11 @@ dataSources:
       eventHandlers:
         - event: WhiteList(address,bool)
           handler: handleWhiteList
-        - event: Erc20TokenUpdated(indexed address,bool,string,string,uint256)
-          handler: handleErc20TokenUpdatedEvent
+        - event: Erc20TokenUpdated(indexed uint256,indexed address,bool,string,string,uint256)
+          handler: handleErc20TokenUpdatedMaster
         - event: Erc721TokenUpdated(indexed uint256,indexed
             address,bool,uint256,string,string,uint256)
-          handler: handleErc721TokenUpdatedEvent
+          handler: handleErc721TokenUpdatedMaster
         - event: PlatformFeeUpdated(uint256)
           handler: handlePlatformFee
         - event: EventStatusUpdated(bool)
@@ -91,6 +97,8 @@ dataSources:
           handler: handleRentalCommission
         - event: BaseTokenUpdated(indexed address,string,string,uint256)
           handler: handleBaseTokenUpdated
+        - event: TicketCommissionUpdated(uint256)
+          handler: handleTicketCommissionUpdated
       file: venue\venue.wasm
   - kind: ethereum/contract
     name: conversion
@@ -101,7 +109,7 @@ dataSources:
       startBlock: 40327129
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscripts
       entities:
         - EventList
@@ -123,7 +131,7 @@ dataSources:
       startBlock: 40406109
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscripts
       entities:
         - History
@@ -143,7 +151,7 @@ dataSources:
       startBlock: 40332432
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Agenda
@@ -182,7 +190,7 @@ dataSources:
       startBlock: 40334231
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscripts
       entities:
         - EventList
@@ -201,7 +209,7 @@ templates:
       abi: ticket
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: venue\venue.wasm
       entities:

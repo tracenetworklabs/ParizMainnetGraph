@@ -89,24 +89,28 @@ export class Erc20TokenUpdated__Params {
     this._event = event;
   }
 
+  get eventTokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
   get tokenAddress(): Address {
-    return this._event.parameters[0].value.toAddress();
+    return this._event.parameters[1].value.toAddress();
   }
 
   get status(): boolean {
-    return this._event.parameters[1].value.toBoolean();
+    return this._event.parameters[2].value.toBoolean();
   }
 
   get name(): string {
-    return this._event.parameters[2].value.toString();
-  }
-
-  get symbol(): string {
     return this._event.parameters[3].value.toString();
   }
 
+  get symbol(): string {
+    return this._event.parameters[4].value.toString();
+  }
+
   get decimal(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
+    return this._event.parameters[5].value.toBigInt();
   }
 }
 
@@ -376,11 +380,38 @@ export class admin__getTokenDetailsResult {
     map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     return map;
   }
+
+  getValue0(): string {
+    return this.value0;
+  }
+
+  getValue1(): string {
+    return this.value1;
+  }
+
+  getValue2(): BigInt {
+    return this.value2;
+  }
 }
 
 export class admin extends ethereum.SmartContract {
   static bind(address: Address): admin {
     return new admin("admin", address);
+  }
+
+  IID_IERC721(): Bytes {
+    let result = super.call("IID_IERC721", "IID_IERC721():(bytes4)", []);
+
+    return result[0].toBytes();
+  }
+
+  try_IID_IERC721(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall("IID_IERC721", "IID_IERC721():(bytes4)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
   convertFee(paymentToken: Address, mintFee: BigInt): BigInt {
@@ -438,6 +469,38 @@ export class admin extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  erc20TokenAddressEvent(param0: BigInt, param1: Address): boolean {
+    let result = super.call(
+      "erc20TokenAddressEvent",
+      "erc20TokenAddressEvent(uint256,address):(bool)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromAddress(param1)
+      ]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_erc20TokenAddressEvent(
+    param0: BigInt,
+    param1: Address
+  ): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "erc20TokenAddressEvent",
+      "erc20TokenAddressEvent(uint256,address):(bool)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromAddress(param1)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   erc721TokenAddress(param0: BigInt, param1: Address): boolean {
     let result = super.call(
       "erc721TokenAddress",
@@ -462,6 +525,29 @@ export class admin extends ethereum.SmartContract {
         ethereum.Value.fromUnsignedBigInt(param0),
         ethereum.Value.fromAddress(param1)
       ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  erc721TokenAddressMaster(param0: Address): boolean {
+    let result = super.call(
+      "erc721TokenAddressMaster",
+      "erc721TokenAddressMaster(address):(bool)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_erc721TokenAddressMaster(param0: Address): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "erc721TokenAddressMaster",
+      "erc721TokenAddressMaster(address):(bool)",
+      [ethereum.Value.fromAddress(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -552,6 +638,29 @@ export class admin extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getEventCallContract(): Address {
+    let result = super.call(
+      "getEventCallContract",
+      "getEventCallContract():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_getEventCallContract(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getEventCallContract",
+      "getEventCallContract():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   getEventContract(): Address {
@@ -707,6 +816,29 @@ export class admin extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  getTicketControllerContract(): Address {
+    let result = super.call(
+      "getTicketControllerContract",
+      "getTicketControllerContract():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_getTicketControllerContract(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getTicketControllerContract",
+      "getTicketControllerContract():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   getTicketMasterContract(): Address {
     let result = super.call(
       "getTicketMasterContract",
@@ -844,6 +976,25 @@ export class admin extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  isERC721(nftAddress: Address): boolean {
+    let result = super.call("isERC721", "isERC721(address):(bool)", [
+      ethereum.Value.fromAddress(nftAddress)
+    ]);
+
+    return result[0].toBoolean();
+  }
+
+  try_isERC721(nftAddress: Address): ethereum.CallResult<boolean> {
+    let result = super.tryCall("isERC721", "isERC721(address):(bool)", [
+      ethereum.Value.fromAddress(nftAddress)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   isErc20TokenWhitelisted(tokenAddress: Address): boolean {
     let result = super.call(
       "isErc20TokenWhitelisted",
@@ -869,10 +1020,73 @@ export class admin extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  isErc721TokenFreePass(eventTokenId: BigInt, tokenAddress: Address): BigInt {
+  isErc20TokenWhitelistedEvent(
+    eventTokenId: BigInt,
+    tokenAddress: Address
+  ): boolean {
+    let result = super.call(
+      "isErc20TokenWhitelistedEvent",
+      "isErc20TokenWhitelistedEvent(uint256,address):(bool)",
+      [
+        ethereum.Value.fromUnsignedBigInt(eventTokenId),
+        ethereum.Value.fromAddress(tokenAddress)
+      ]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isErc20TokenWhitelistedEvent(
+    eventTokenId: BigInt,
+    tokenAddress: Address
+  ): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isErc20TokenWhitelistedEvent",
+      "isErc20TokenWhitelistedEvent(uint256,address):(bool)",
+      [
+        ethereum.Value.fromUnsignedBigInt(eventTokenId),
+        ethereum.Value.fromAddress(tokenAddress)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  isErc721TokenFreePass(tokenAddress: Address): BigInt {
     let result = super.call(
       "isErc721TokenFreePass",
-      "isErc721TokenFreePass(uint256,address):(uint256)",
+      "isErc721TokenFreePass(address):(uint256)",
+      [ethereum.Value.fromAddress(tokenAddress)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_isErc721TokenFreePass(
+    tokenAddress: Address
+  ): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "isErc721TokenFreePass",
+      "isErc721TokenFreePass(address):(uint256)",
+      [ethereum.Value.fromAddress(tokenAddress)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  isErc721TokenFreePassEvent(
+    eventTokenId: BigInt,
+    tokenAddress: Address
+  ): BigInt {
+    let result = super.call(
+      "isErc721TokenFreePassEvent",
+      "isErc721TokenFreePassEvent(uint256,address):(uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(eventTokenId),
         ethereum.Value.fromAddress(tokenAddress)
@@ -882,13 +1096,13 @@ export class admin extends ethereum.SmartContract {
     return result[0].toBigInt();
   }
 
-  try_isErc721TokenFreePass(
+  try_isErc721TokenFreePassEvent(
     eventTokenId: BigInt,
     tokenAddress: Address
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "isErc721TokenFreePass",
-      "isErc721TokenFreePass(uint256,address):(uint256)",
+      "isErc721TokenFreePassEvent",
+      "isErc721TokenFreePassEvent(uint256,address):(uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(eventTokenId),
         ethereum.Value.fromAddress(tokenAddress)
@@ -901,13 +1115,38 @@ export class admin extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  isErc721TokenWhitelisted(
+  isErc721TokenWhitelisted(tokenAddress: Address): boolean {
+    let result = super.call(
+      "isErc721TokenWhitelisted",
+      "isErc721TokenWhitelisted(address):(bool)",
+      [ethereum.Value.fromAddress(tokenAddress)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isErc721TokenWhitelisted(
+    tokenAddress: Address
+  ): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isErc721TokenWhitelisted",
+      "isErc721TokenWhitelisted(address):(bool)",
+      [ethereum.Value.fromAddress(tokenAddress)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  isErc721TokenWhitelistedEvent(
     eventTokenId: BigInt,
     tokenAddress: Address
   ): boolean {
     let result = super.call(
-      "isErc721TokenWhitelisted",
-      "isErc721TokenWhitelisted(uint256,address):(bool)",
+      "isErc721TokenWhitelistedEvent",
+      "isErc721TokenWhitelistedEvent(uint256,address):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(eventTokenId),
         ethereum.Value.fromAddress(tokenAddress)
@@ -917,13 +1156,13 @@ export class admin extends ethereum.SmartContract {
     return result[0].toBoolean();
   }
 
-  try_isErc721TokenWhitelisted(
+  try_isErc721TokenWhitelistedEvent(
     eventTokenId: BigInt,
     tokenAddress: Address
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
-      "isErc721TokenWhitelisted",
-      "isErc721TokenWhitelisted(uint256,address):(bool)",
+      "isErc721TokenWhitelistedEvent",
+      "isErc721TokenWhitelistedEvent(uint256,address):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(eventTokenId),
         ethereum.Value.fromAddress(tokenAddress)
@@ -1082,6 +1321,29 @@ export class admin extends ethereum.SmartContract {
         ethereum.Value.fromUnsignedBigInt(param0),
         ethereum.Value.fromAddress(param1)
       ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  tokenFreePassStatusMaster(param0: Address): BigInt {
+    let result = super.call(
+      "tokenFreePassStatusMaster",
+      "tokenFreePassStatusMaster(address):(uint256)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_tokenFreePassStatusMaster(param0: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "tokenFreePassStatusMaster",
+      "tokenFreePassStatusMaster(address):(uint256)",
+      [ethereum.Value.fromAddress(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -1286,6 +1548,36 @@ export class UpdateDeviationCall__Outputs {
   _call: UpdateDeviationCall;
 
   constructor(call: UpdateDeviationCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateEventCallContractCall extends ethereum.Call {
+  get inputs(): UpdateEventCallContractCall__Inputs {
+    return new UpdateEventCallContractCall__Inputs(this);
+  }
+
+  get outputs(): UpdateEventCallContractCall__Outputs {
+    return new UpdateEventCallContractCall__Outputs(this);
+  }
+}
+
+export class UpdateEventCallContractCall__Inputs {
+  _call: UpdateEventCallContractCall;
+
+  constructor(call: UpdateEventCallContractCall) {
+    this._call = call;
+  }
+
+  get _eventCallContract(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class UpdateEventCallContractCall__Outputs {
+  _call: UpdateEventCallContractCall;
+
+  constructor(call: UpdateEventCallContractCall) {
     this._call = call;
   }
 }
@@ -1500,6 +1792,36 @@ export class UpdateTicketCommissionCall__Outputs {
   }
 }
 
+export class UpdateTicketControllerContractCall extends ethereum.Call {
+  get inputs(): UpdateTicketControllerContractCall__Inputs {
+    return new UpdateTicketControllerContractCall__Inputs(this);
+  }
+
+  get outputs(): UpdateTicketControllerContractCall__Outputs {
+    return new UpdateTicketControllerContractCall__Outputs(this);
+  }
+}
+
+export class UpdateTicketControllerContractCall__Inputs {
+  _call: UpdateTicketControllerContractCall;
+
+  constructor(call: UpdateTicketControllerContractCall) {
+    this._call = call;
+  }
+
+  get _ticketControllerContract(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class UpdateTicketControllerContractCall__Outputs {
+  _call: UpdateTicketControllerContractCall;
+
+  constructor(call: UpdateTicketControllerContractCall) {
+    this._call = call;
+  }
+}
+
 export class UpdateTicketMasterContractCall extends ethereum.Call {
   get inputs(): UpdateTicketMasterContractCall__Inputs {
     return new UpdateTicketMasterContractCall__Inputs(this);
@@ -1654,6 +1976,52 @@ export class UpdateWhitelistCall__Outputs {
   }
 }
 
+export class UpdateWhitelistTokenCall extends ethereum.Call {
+  get inputs(): UpdateWhitelistTokenCall__Inputs {
+    return new UpdateWhitelistTokenCall__Inputs(this);
+  }
+
+  get outputs(): UpdateWhitelistTokenCall__Outputs {
+    return new UpdateWhitelistTokenCall__Outputs(this);
+  }
+}
+
+export class UpdateWhitelistTokenCall__Inputs {
+  _call: UpdateWhitelistTokenCall;
+
+  constructor(call: UpdateWhitelistTokenCall) {
+    this._call = call;
+  }
+
+  get eventTokenId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get tokenAddress(): Array<Address> {
+    return this._call.inputValues[1].value.toAddressArray();
+  }
+
+  get status(): Array<boolean> {
+    return this._call.inputValues[2].value.toBooleanArray();
+  }
+
+  get tokenType(): Array<string> {
+    return this._call.inputValues[3].value.toStringArray();
+  }
+
+  get freePassStatus(): Array<BigInt> {
+    return this._call.inputValues[4].value.toBigIntArray();
+  }
+}
+
+export class UpdateWhitelistTokenCall__Outputs {
+  _call: UpdateWhitelistTokenCall;
+
+  constructor(call: UpdateWhitelistTokenCall) {
+    this._call = call;
+  }
+}
+
 export class WhitelistErc20TokenAddressCall extends ethereum.Call {
   get inputs(): WhitelistErc20TokenAddressCall__Inputs {
     return new WhitelistErc20TokenAddressCall__Inputs(this);
@@ -1705,20 +2073,16 @@ export class WhitelistErc721TokenAddressCall__Inputs {
     this._call = call;
   }
 
-  get eventTokenId(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
   get tokenAddress(): Address {
-    return this._call.inputValues[1].value.toAddress();
+    return this._call.inputValues[0].value.toAddress();
   }
 
   get status(): boolean {
-    return this._call.inputValues[2].value.toBoolean();
+    return this._call.inputValues[1].value.toBoolean();
   }
 
   get freePassStatus(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
+    return this._call.inputValues[2].value.toBigInt();
   }
 }
 
@@ -1726,6 +2090,48 @@ export class WhitelistErc721TokenAddressCall__Outputs {
   _call: WhitelistErc721TokenAddressCall;
 
   constructor(call: WhitelistErc721TokenAddressCall) {
+    this._call = call;
+  }
+}
+
+export class WhitelistTokenCall extends ethereum.Call {
+  get inputs(): WhitelistTokenCall__Inputs {
+    return new WhitelistTokenCall__Inputs(this);
+  }
+
+  get outputs(): WhitelistTokenCall__Outputs {
+    return new WhitelistTokenCall__Outputs(this);
+  }
+}
+
+export class WhitelistTokenCall__Inputs {
+  _call: WhitelistTokenCall;
+
+  constructor(call: WhitelistTokenCall) {
+    this._call = call;
+  }
+
+  get eventTokenId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get tokenAddress(): Array<Address> {
+    return this._call.inputValues[1].value.toAddressArray();
+  }
+
+  get tokenType(): Array<string> {
+    return this._call.inputValues[2].value.toStringArray();
+  }
+
+  get freePassStatus(): Array<BigInt> {
+    return this._call.inputValues[3].value.toBigIntArray();
+  }
+}
+
+export class WhitelistTokenCall__Outputs {
+  _call: WhitelistTokenCall;
+
+  constructor(call: WhitelistTokenCall) {
     this._call = call;
   }
 }

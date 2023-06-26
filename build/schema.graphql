@@ -10,6 +10,7 @@ type VenueList @entity {
   transactionHash: String
   timestamp: BigInt
   isActive: Boolean
+  venueOwner: Bytes
 }
 
 type VenueRental @entity {
@@ -21,6 +22,7 @@ type EventList @entity {
   id: ID!
   eventTokenId: BigInt
   venueTokenId: BigInt
+  venueVersion: String
   eventName: String
   eventCategory: String
   eventDescription: String
@@ -44,9 +46,9 @@ type EventList @entity {
   canceledTime: BigInt
   isEventStarted: Boolean
   isEventEnded: Boolean
-  participantsList: [Join]!
-  ticketBoughtList: [TicketBought]!
-  ticketBalance: [TicketBalance]!
+  participantsList: [Join!]!
+  ticketBoughtList: [TicketBought!]!
+  ticketBalance: [TicketBalance!]!
   conversionAddress: Bytes
 }
 
@@ -79,6 +81,7 @@ type Erc20TokenEvent @entity {
   id: ID!
   tokenAddress: Bytes
   status: Boolean
+  eventTokenId: BigInt
   tokenName: String
   tokenSymbol: String
   tokenDecimal: BigInt
@@ -117,7 +120,7 @@ type BookedTime @entity {
   transactionHash: String
   timestamp: BigInt
   isActive: Boolean
-  times: [EventTime]!
+  times: [EventTime!]!
 }
 
 type EventTime @entity {
@@ -227,4 +230,58 @@ type isTokenUsed @entity {
   nftContractAddress: Bytes
   tokenID: BigInt
   isUsed: Boolean
+}
+
+type eventStat @entity {
+  id: ID!
+  eventTokenId: BigInt
+  eventEndTime: BigInt
+  likeCount: BigInt
+  ticketCount: BigInt
+  joinedCount: BigInt
+  liveUsersCount: BigInt
+  oneTicketPrice: BigInt
+}
+
+type likeCount @entity {
+  id: ID!
+  eventTokenId: BigInt
+  likeCounts: BigInt
+}
+
+type ticketCount @entity {
+  id: ID!
+  eventTokenId: BigInt
+  ticketCount: BigInt
+}
+
+
+type joinCount @entity {
+  id: ID!
+  eventTokenId: BigInt
+  joinedCount: BigInt
+  liveUsersCount: BigInt  
+}
+
+type eventActivity @entity {
+  id: ID!
+  userAddress: Bytes 
+  uniqueUserCount: BigInt
+  liveUsersCount: BigInt
+  eventTokenId: BigInt
+  eventEndTime: BigInt
+  joinTime: BigInt
+  exitTime: BigInt
+}
+
+type uniqueUserExit @entity {
+  id: ID!
+  uniqueUserAddress: Bytes 
+  eventTokenId: BigInt
+}
+
+
+type ticketCommission @entity {
+  id: ID!
+  ticketCommissionPercent: BigInt
 }
