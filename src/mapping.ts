@@ -549,6 +549,23 @@ export function handleEventStatus(event: EventStatusUpdated): void {
   token.save();
 }
 
+export function handleTransfer(event: TransferToken): void {
+  // let token = EventList.load(event.params.tokenId.toString());
+  // if(!token) {
+  //   token = new EventList(event.params.tokenId.toString());
+  //   token.eventOrganiserAddress = event.params.to;
+  //   token.eventTokenId = event.params.tokenId;
+  // }
+  // else {
+  //   if(event.params.to == Address.fromString("0x0000000000000000000000000000000000000000")) {
+  //     token.eventOrganiserAddress = event.params.to;
+  //     token.burnStatus = "Token Burned";
+      
+  //   }
+  // }
+  // token.save();
+}
+
 export function handleRentalCommission(event: VenueRentalCommissionUpdated): void {
   let token = VenueRental.load(event.params.venueRentalCommission.toString());
   if(!token) {
@@ -612,6 +629,64 @@ export function handleVenueAdded(event: VenueAdded): void {
   entity.save();
 }
 
+export function handleErc20Details(event: Erc20DetailsEvent): void {
+  // let tokenValue = Erc20TokenEvent.load(event.params.tokenAddress.toString());
+  // if(!tokenValue) {
+  //   tokenValue = new Erc20TokenEvent(event.params.tokenAddress.toString());
+  //   tokenValue.tokenName = event.params.name;
+  //   tokenValue.tokenSymbol = event.params.symbol;
+  //   tokenValue.tokenDecimal = event.params.decimal;
+  //   tokenValue.tokenAddress = event.params.tokenAddress;
+    // let contract = conversionContractAddress.bind(event.address);
+    // let address = contract.getBaseToken();
+    // let token = BaseToken.load(address.toString());
+    // if(!token) {
+    //   token = new BaseToken(address.toString());
+    //   token.baseTokenAddress = address;
+    //   if(address.toString() == event.params.tokenAddress.toString()) {
+    //     token.tokenName = event.params.name;
+    //     token.tokenSymbol = event.params.symbol;
+    //     token.tokenDecimal = event.params.decimal;
+    //    }
+    // }
+    // else {
+    //   if(address.toString() == event.params.tokenAddress.toString()) {
+    //     token.tokenName = event.params.name;
+    //     token.tokenSymbol = event.params.symbol;
+    //     token.tokenDecimal = event.params.decimal;
+    //   }
+    // }
+    // token.save();
+  // }
+  // else {
+  //   tokenValue.tokenName = event.params.name;
+  //   tokenValue.tokenSymbol = event.params.symbol;
+  //   tokenValue.tokenDecimal = event.params.decimal;
+  //   tokenValue.tokenAddress = event.params.tokenAddress;  
+    // let contract = conversionContractAddress.bind(event.address);
+    // let address = contract.getBaseToken();
+    // let token = BaseToken.load(address.toString());
+    // if(!token) {
+    //   token = new BaseToken(address.toString());
+    //   token.baseTokenAddress = address;
+    //   if(address.toString() == event.params.tokenAddress.toString()) {
+    //     token.tokenName = event.params.name;
+    //     token.tokenSymbol = event.params.symbol;
+    //     token.tokenDecimal = event.params.decimal;
+    //   }
+    // }
+    // else {
+    //   if(address.toString() == event.params.tokenAddress.toString()) {
+    //     token.tokenName = event.params.name;
+    //     token.tokenSymbol = event.params.symbol;
+    //     token.tokenDecimal = event.params.decimal;
+    //   }
+    // }
+    // token.save();
+  // }
+  //  tokenValue.save();
+}
+
 export function handleVenueFeesUpdated(event: VenueFeesUpdated): void {
   let token = VenueList.load(event.params.tokenId.toHex());
   if(token) {
@@ -644,7 +719,25 @@ export function handleActiveStatusUpdated(event: ActiveStatusUpdated): void {
     tokenValue.save();
   }
 }
+export function handleErc721Details(event: Erc721DetailsEvent): void {
+  // let tokenValue = Erc721EventToken.load(event.params.tokenAddress.toString());
+  // if(!tokenValue) {
+  //   tokenValue = new Erc721EventToken(event.params.tokenAddress.toString());
+  //   tokenValue.tokenName = event.params.name;
+  //   tokenValue.tokenSymbol = event.params.symbol;
+  //   tokenValue.tokenDecimal = "0";
+  //   tokenValue.tokenAddress = event.params.tokenAddress;
+  //   tokenValue.tokenDetails = [null];
+  // }
+  // else {
+  //   tokenValue.tokenName = event.params.name;
+  //   tokenValue.tokenSymbol = event.params.symbol;
+  //   tokenValue.tokenDecimal = "0";
+  // }
 
+  // tokenValue.save();
+
+}
 export function handleDataAdded(event: DataAdded): void {
   let token = History.load(event.params.tokenId.toString() + event.params.userAddress.toString());
   if(!token) {
